@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using ChatApp.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.Hubs
 {
     public class ChatHub : Hub
     {
-        public override async Task OnConnectedAsync()
+        public async Task Send(Message message)
         {
-            await Clients.All.SendAsync("");
+            // Call the broadcastMessage method to update clients.
+            await Clients.All.SendAsync("broadcastMessage", message);
         }
     }
 }

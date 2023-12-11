@@ -9,7 +9,9 @@
   <ItemGroup>
     <Folder Include="Api\" />
     <Folder Include="Database\" />
-    <Folder Include="NewFolder\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="wwwroot\lib\signalr\" />
   </ItemGroup>
 
   <ItemGroup>
