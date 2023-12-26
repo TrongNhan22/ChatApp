@@ -7,12 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Api\" />
-    <Folder Include="Database\" />
+    <Compile Remove="Api\**" />
+    <Compile Remove="Database\**" />
+    <Content Remove="Api\**" />
+    <Content Remove="Database\**" />
+    <EmbeddedResource Remove="Api\**" />
+    <EmbeddedResource Remove="Database\**" />
+    <None Remove="Api\**" />
+    <None Remove="Database\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>
