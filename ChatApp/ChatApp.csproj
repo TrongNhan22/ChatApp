@@ -7,17 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Api\**" />
-    <Compile Remove="Database\**" />
     <Content Remove="Api\**" />
     <Content Remove="Database\**" />
     <EmbeddedResource Remove="Api\**" />
     <EmbeddedResource Remove="Database\**" />
     <None Remove="Api\**" />
     <None Remove="Database\**" />
+	<Folder Include="Repositories\" />
+	<Folder Include="ViewModels\" />
+	<Folder Include="wwwroot\lib\signalr\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
   </ItemGroup>
 
