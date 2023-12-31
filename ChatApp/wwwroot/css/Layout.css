@@ -1,5 +1,12 @@
 ﻿body {
+    font-size: 16px;
+    font-family: ''
 }
+
+header {
+    padding-bottom: 4rem;
+}
+
 .navbar-brand {
     display: flex;
     flex-direction: column;

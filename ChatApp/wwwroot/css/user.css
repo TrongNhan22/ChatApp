@@ -1,0 +1,14 @@
+﻿body {
+
+}
+
+.image-frame {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #000;
+}
