@@ -21,7 +21,16 @@ header {
 
 .nav-link:hover {
     cursor: pointer;
-    
     opacity: 0.8;
+}
+
+.btn {
+   color: white !important;
+   font-size: 12px !important;
+}
+
+.rounded-circle{
+    width: 40px;
+
 }
 

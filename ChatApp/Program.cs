@@ -1,3 +1,4 @@
+using ChatApp.Data;
 using ChatApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();
+builder.Services.Configure<MongoDBSetting>(builder.Configuration.GetSection("MongoDB"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
