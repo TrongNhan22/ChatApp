@@ -1,5 +1,12 @@
 ﻿body {
+    font-size: 16px;
+    font-family: ''
 }
+
+header {
+    padding-bottom: 4rem;
+}
+
 .navbar-brand {
     display: flex;
     flex-direction: column;
@@ -14,7 +21,16 @@
 
 .nav-link:hover {
     cursor: pointer;
-    
     opacity: 0.8;
+}
+
+.btn {
+   color: white !important;
+   font-size: 12px !important;
+}
+
+.rounded-circle{
+    width: 40px;
+
 }
 
