@@ -7,15 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <Compile Remove="ViewModels\**" />
     <Content Remove="Api\**" />
     <Content Remove="Database\**" />
+    <Content Remove="Repositories\**" />
+    <Content Remove="ViewModels\**" />
     <EmbeddedResource Remove="Api\**" />
     <EmbeddedResource Remove="Database\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Api\**" />
     <None Remove="Database\**" />
-	<Folder Include="Repositories\" />
-	<Folder Include="ViewModels\" />
-	<Folder Include="wwwroot\lib\signalr\" />
+    <None Remove="Repositories\**" />
+    <None Remove="ViewModels\**" />
+    <Folder Include="wwwroot\lib\signalr\" />
   </ItemGroup>
 
   <ItemGroup>
