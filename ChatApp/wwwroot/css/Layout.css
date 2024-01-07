@@ -34,3 +34,19 @@ header {
 
 }
 
+.btn-search-friend {
+    color: #336699 !important;
+}
+.btn-search-friend:hover{
+    color: #fff !important;
+    background-color: #336699 !important;
+}
+
+#searchDropdown {
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 150px; /* Adjust as needed */
+    overflow-y: auto;
+}

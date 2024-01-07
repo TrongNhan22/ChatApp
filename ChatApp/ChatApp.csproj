@@ -7,18 +7,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <Compile Remove="ViewModels\**" />
     <Content Remove="Api\**" />
     <Content Remove="Database\**" />
+    <Content Remove="Repositories\**" />
+    <Content Remove="ViewModels\**" />
     <EmbeddedResource Remove="Api\**" />
     <EmbeddedResource Remove="Database\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Api\**" />
     <None Remove="Database\**" />
+    <None Remove="Repositories\**" />
+    <None Remove="ViewModels\**" />
+    <Content Remove="appsettings.Development.json" />
+    <Content Remove="appsettings.json" />
+    <Folder Include="wwwroot\lib\signalr\" />
 	<Folder Include="Services\" />
-	<Folder Include="wwwroot\lib\signalr\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.Identity.Mongo" Version="8.3.3" />
+    <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
   </ItemGroup>
 

@@ -1,9 +1,13 @@
-﻿namespace ChatApp.Data
+﻿using ChatApp.Models;
+using MongoDB.Driver;
+
+namespace ChatApp.Data
 {
     public class MongoDBSetting
     {
         public string? ConnectionURI { get; set; }
         public string? DatabaseName { get; set; }
+        public string? userCollectionName { get; set; }
         public string MessageCollectionName { get; set; } = null!;
     }
 }
