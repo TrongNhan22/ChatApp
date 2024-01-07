@@ -1,4 +1,5 @@
-﻿using ChatApp.Data;
+﻿using ChatApp.Controllers;
+using ChatApp.Data;
 using ChatApp.Interface;
 using ChatApp.Models;
 using ChatApp.Pages;
@@ -12,7 +13,7 @@ namespace ChatApp.Repository
     {
         private readonly IOptions<MongoDBSetting> _mongoDBSettting;
         private readonly IMongoCollection<User> _user;
-        public User user;
+        //User user_login = Globals.user;
         public LoginRepository(IOptions<MongoDBSetting> mongoDBSettting)
         {
             _mongoDBSettting = mongoDBSettting;
@@ -39,8 +40,8 @@ namespace ChatApp.Repository
                 Builders<User>.Filter.Eq(u => u.password, user.password)
             );
 
-            user = await _user.Find(filter).FirstOrDefaultAsync();
-            return user;
+            User user_login = await _user.Find(filter).FirstOrDefaultAsync();
+            return user_login;
         }
 
     }
