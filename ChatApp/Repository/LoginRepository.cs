@@ -12,6 +12,7 @@ namespace ChatApp.Repository
     {
         private readonly IOptions<MongoDBSetting> _mongoDBSettting;
         private readonly IMongoCollection<User> _user;
+        public User user;
         public LoginRepository(IOptions<MongoDBSetting> mongoDBSettting)
         {
             _mongoDBSettting = mongoDBSettting;
@@ -38,8 +39,8 @@ namespace ChatApp.Repository
                 Builders<User>.Filter.Eq(u => u.password, user.password)
             );
 
-            var result = await _user.Find(filter).FirstOrDefaultAsync();
-            return result;
+            user = await _user.Find(filter).FirstOrDefaultAsync();
+            return user;
         }
 
     }

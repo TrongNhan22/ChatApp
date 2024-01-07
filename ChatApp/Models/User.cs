@@ -21,6 +21,5 @@ namespace ChatApp.Models
         public string? birthday { get; set; }
         public string? fullname { get; set; }
         public string? gender { get; set; }
-        public int? isLogin { get; set; }
     }
 }

@@ -7,8 +7,6 @@ namespace ChatApp.Controllers
 {
     public class UserController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         public User user;
         private readonly ILogin _ilogin;
 
