@@ -1,5 +1,12 @@
 using ChatApp.Data;
 using ChatApp.Hubs;
+using ChatApp.Repository;
+using ChatApp.Models;
+using MongoDB.Bson;
+using AspNetCore.Identity.Mongo.Model;
+//using AspNetCore.Identity.Mongo;
+using MongoDbGenericRepository.Attributes;
+using ChatApp.Interface;
 using ChatApp.Interfaces;
 using ChatApp.Repositories;
 
@@ -10,6 +17,21 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();
 builder.Services.Configure<MongoDBSetting>(builder.Configuration.GetSection("MongoDB"));
+
+// This is required to ensure server can identify user after login
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
+
+builder.Services.AddScoped<ISearchFriendRepository, SearchFriendRepository>();
+builder.Services.AddScoped<ILogin, LoginRepository>();
 
 //Database Singletons
 builder.Services.AddSingleton<MessageRepository>();
