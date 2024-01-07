@@ -9,14 +9,17 @@ namespace ChatApp.Repository
 {
     public class SearchFriendRepository : ISearchFriendRepository
     {
-        private readonly IOptions<MongoDBSetting> mongoDBSettting;
+        private readonly IOptions<MongoDBSetting> _mongoDBSettting;
         private readonly IMongoCollection<User> user;
 
         public SearchFriendRepository(IOptions<MongoDBSetting> mongoDBSettting)
         {
-            this.mongoDBSettting = mongoDBSettting;
-            user = this.mongoDBSettting.Value.userCollection;
+            _mongoDBSettting = mongoDBSettting;
+            MongoClient mongoClient = new MongoClient(_mongoDBSettting.Value.ConnectionURI);
+            IMongoDatabase mongoDatabase = mongoClient.GetDatabase(_mongoDBSettting.Value.DatabaseName);
+            user = mongoDatabase.GetCollection<User>(_mongoDBSettting.Value.userCollectionName);
         }
+
 
         public async Task<List<User>> GetUserByNameAsync(string userName)
         {
