@@ -28,7 +28,7 @@ namespace ChatApp.Controllers
             }
             // If the user does not exist, redirect back to the login page
             TempData["Error"] = "Email or password is not correct!";
-            user.isLogin = 0;
+            //user.isLogin = 0;
             return Redirect("/Login");
         }
     }
