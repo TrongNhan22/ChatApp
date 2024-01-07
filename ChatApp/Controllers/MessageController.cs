@@ -1,14 +1,14 @@
 ﻿using ChatApp.Models;
-using ChatApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ChatApp.ViewModels;
+using ChatApp.Interface;
 
 namespace ChatApp.Controllers
 {
     public class MessageController : Controller
     {
         private readonly IMessageRepository _messageRepository;
-
+      
         public MessageController(IMessageRepository messageService)
         {
             _messageRepository = messageService;
@@ -23,11 +23,13 @@ namespace ChatApp.Controllers
             //For testing
             string senderId = "65340b20b32df212d36f15ad";
             var messages = await _messageRepository.GetListBySenderAndReceiverIdAsync(senderId, receiverId);
+            var chatPartnerList = await _messageRepository.GetChatPartner();
             var messageViewModel = new MessageViewModel
             {
                 SenderId = senderId,
                 ReceiverId = receiverId,
-                Messages = messages
+                Messages = messages,
+                ChatPartners=chatPartnerList
             };
             return View(messageViewModel);
 

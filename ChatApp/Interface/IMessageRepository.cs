@@ -1,6 +1,7 @@
 ﻿using ChatApp.Models;
+using ChatApp.ViewModels;
 
-namespace ChatApp.Interfaces
+namespace ChatApp.Interface
 {
     public interface IMessageRepository
     {
@@ -10,5 +11,6 @@ namespace ChatApp.Interfaces
         public Task CreateAsync(Message newMessage);
         public Task UpdateAsync(string id, Message updatedMessage);
         public Task DeleteAsync(string id);
+        public Task<IEnumerable<ChatPartnerViewModel>> GetChatPartner();
     }
 }

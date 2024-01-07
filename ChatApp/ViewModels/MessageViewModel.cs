@@ -10,5 +10,7 @@ namespace ChatApp.ViewModels
         public string? Content { get; set; }
         public string? Media { get; set; }
         public string? Date { get; set; }
+        public IEnumerable<string>? ChatUser { get; set; }
+        public IEnumerable<ChatPartnerViewModel>? ChatPartners { get; set; }
     }
 }

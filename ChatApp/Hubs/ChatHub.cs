@@ -1,4 +1,4 @@
-﻿using ChatApp.Interfaces;
+﻿using ChatApp.Interface;
 using ChatApp.Models;
 using Microsoft.AspNetCore.SignalR;
 using SignalRChatDemo.Models;

@@ -7,8 +7,7 @@ using AspNetCore.Identity.Mongo.Model;
 //using AspNetCore.Identity.Mongo;
 using MongoDbGenericRepository.Attributes;
 using ChatApp.Interface;
-using ChatApp.Interfaces;
-using ChatApp.Repositories;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,9 +31,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddScoped<ISearchFriendRepository, SearchFriendRepository>();
 builder.Services.AddScoped<ILogin, LoginRepository>();
-
-//Database Singletons
-builder.Services.AddSingleton<MessageRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 var app = builder.Build();
