@@ -1,11 +1,9 @@
-﻿@page
-@model ChatApp.Pages.Shared.Pages_Shared__Layout;
+﻿@model MessageViewModel
 @{
+    //@model ChatApp.Pages.Shared.Pages_Shared__Layout;
     Layout = "../../Pages/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html>
 <head>
     <title>SignalR Chat</title>
     <style type="text/css">
@@ -16,12 +14,12 @@
             margin: 20px;
         }
     </style>
+    <script src="~/lib/helpers/createChatBubble.js"></script>
 </head>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <body>
     <section style="background-color: #CDC4F9;">
         <div class="container py-5">
-
             <div class="row">
                 <div class="col-md-12">
 
@@ -40,7 +38,9 @@
                                                 <i class="fas fa-search"></i>
                                             </span>
                                         </div>
-
+                                        <div>
+                                            <a type="button" asp-controller="Message" asp-action="Index">Test messageDB</a>
+                                        </div>
                                         <div data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px; overflow-y: scroll">
                                             <ul class="scrollable" class="list-unstyled mb-0" id="userlist">
                                                 <!--This is where online user and/or groups will be-->
@@ -55,20 +55,61 @@
 
                                     <div id="chatbox" class="pt-3 pe-3 scrollable" data-mdb-perfect-scrollbar="true"
                                          style="position: relative; height: 400px; overflow-y: scroll">
-                                        <!--This is where chat content will be-->
+                                        @if (Model is not null && Model.Messages is not null)
+                                            //Chat fetched from MongoDB
+                                            @foreach (var message in Model.Messages)
+                                            {
+                                                @if (message.SenderId == "SYSTEM")
+                                                {
+                                                    <div class="d-flex flex-row justify-content-center">
+                                                        <div>
+                                                            <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #a3ffb4;">
+                                                                @message.Content
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (message.SenderId == Model.SenderId)
+                                                {
+                                                    <div class="d-flex flex-row justify-content-end">
+                                                        <div>
+                                                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                                                                @message.Content
+                                                            </p>
+                                                            <p class="small me-3 mb-3 rounded-3 text-muted"> 12: 00 PM | Aug 13 </p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-flex flex-row justify-content-start">
+                                                        <p>@message.SenderId </p>
+                                                        <div>
+                                                            <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
+                                                                @message.Content
+                                                            </p>
+                                                            <p class="small ms-3 mb-3 rounded-3 text-muted float-end">
+                                                                12: 00 PM | Aug 13
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        <!--This is where chat content sent from SignalR will be-->
                                     </div>
-
-                                    <div class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                             alt="avatar 3" style="width: 40px; height: 100%;">
-                                        <input type="text" class="form-control form-control-lg" id="messageinput"
-                                               placeholder="Nhập tin nhắn">
-                                               <button id="sendmessage">Send</button>
-                                        <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-                                        <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-                                        <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
-                                    </div>
-
+                                    <form id="postMessageForm" enctype="multipart/form-data">
+                                        <div class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                                                 alt="avatar 3" style="width: 40px; height: 100%;">
+                                            <input id="senderId" type="hidden" asp-for="SenderId" />
+                                            <input id="receiverId" type="hidden" asp-for="ReceiverId" />
+                                            <input type="text" asp-for="Content" class="form-control form-control-lg" id="messageInput"
+                                                    placeholder="Nhập tin nhắn">
+                                            <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+                                            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
+                                            <a class="ms-3 text-muted" id="sendmessage" style="outline:none"><i class="fas fa-paper-plane" id="sendmessage"></i></a>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 
@@ -89,15 +130,16 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             var connectedUserList = [];
-            var messageInput = document.getElementById('messageinput');
-
-            var name = '';
+            var messageInput = document.getElementById('messageInput');
+            var senderId = document.getElementById('senderId');
+            var receiverId = document.getElementById('receiverId');
             // Set initial focus to message input box.
             messageInput.focus();
-
+            
             // Start the connection.
             var connection = new signalR.HubConnectionBuilder()
                 .withUrl('/ChatHub')
+                .withAutomaticReconnect()
                 .build();
 
             function addUserElement(userId) {
@@ -124,7 +166,16 @@
                 // Add the message to the page.
                 var chatElement = document.createElement('div');
                 var innerHtml = createChatBubble(message, name);
+                chatElement.innerHTML = innerHtml;
+                var chatBox = document.getElementById('chatbox');
+                chatBox.appendChild(chatElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
 
+            connection.on('receivePrivate', function (message) {
+                // Add the message to the page.
+                var chatElement = document.createElement('div');
+                var innerHtml = createChatBubble(message, name);
                 chatElement.innerHTML = innerHtml;
                 var chatBox = document.getElementById('chatbox');
                 chatBox.appendChild(chatElement);
@@ -136,10 +187,6 @@
                 users.forEach((user) =>{
                     addUserElement(user);
                 });
-                //for (var user in users) {
-                //    console.log(user);
-                //    addUserElement(user);
-                //}
             });
             
             connection.on('UserJoined', function (connectionId){
@@ -163,13 +210,12 @@
                         if (messageInput.value === '' || messageInput.value == null) return;
                         var messageModel = {
                             Id: '',
-                            SenderId: name,
-                            ReceiverId: '',
+                            SenderId: senderId.value,
+                            ReceiverId: receiverId.value,
                             Content: messageInput.value,
                             Media: '',
                         }
-
-                        connection.invoke('send', messageModel);
+                        connection.invoke('SendPrivate', messageModel);
 
                         // Clear text box and reset focus for next comment.
                         messageInput.value = '';
@@ -182,4 +228,3 @@
         });
     </script>
 </body>
-</html>
