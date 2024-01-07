@@ -13,8 +13,7 @@
     <EmbeddedResource Remove="Database\**" />
     <None Remove="Api\**" />
     <None Remove="Database\**" />
-	<Folder Include="Repositories\" />
-	<Folder Include="ViewModels\" />
+	<Folder Include="Services\" />
 	<Folder Include="wwwroot\lib\signalr\" />
   </ItemGroup>
 

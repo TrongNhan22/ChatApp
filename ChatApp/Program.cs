@@ -1,5 +1,7 @@
 using ChatApp.Data;
 using ChatApp.Hubs;
+using ChatApp.Interfaces;
+using ChatApp.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();
 builder.Services.Configure<MongoDBSetting>(builder.Configuration.GetSection("MongoDB"));
+
+//Database Singletons
+builder.Services.AddSingleton<MessageRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
