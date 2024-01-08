@@ -1,3 +1,4 @@
+using ChatApp.Controllers;
 using ChatApp.Data;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Components;

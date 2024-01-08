@@ -8,5 +8,8 @@ namespace ChatApp.Interface
     {
         public Task<bool> GetAccountAsync(User user);
         public Task<User> GetUser(User user);
+
+        public Task<bool> CreateUser(User user);
+
     }
 }

@@ -20,7 +20,5 @@ namespace ChatApp.Models
         public string? Content { get; set; }
         [BsonElement("date")]
         public string? Date { get; set; }
-        [BsonElement("unseen_message_count")]
-        public int? UnseenMessageCount { get; set; }
     }
 }

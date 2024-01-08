@@ -1,4 +1,81 @@
 ﻿@page
-@model ChatApp.Pages.Sign_upModel
+@using ChatApp.Models
+@model User
+@*@model ChatApp.Pages.Sign_upModel*@
 @{
 }
+<head>
+    <link rel="stylesheet" type="text/css" href="./css/Login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="row">
+
+        <div class="col-md-6 offset-3">
+            <p>
+                <h4>Create your account</h4>
+            </p>
+            @if (TempData["Error"] != null)
+            {
+                <div class="col-md-12 alert alert-danger">
+                    <span><b>Sorry!</b> - @TempData["Error"]</span>
+                </div>
+            }
+            @if (TempData["Noti"] != null)
+            {
+                <div class="col-md-12 alert alert-success">
+                    <span><b>Yayy!</b> - @TempData["Noti"]</span>
+                </div>
+            }
+            <form method="post" asp-controller="User" asp-action="Signup">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="fullname" class="control-label" for="exampleInputEmail1">Full name</label>
+                    <input asp-for="fullname" class="form-control" name="fullname" class="form-control" id="fullname" placeholder="Enter your full name" tabindex="1" required>
+                    <span asp-validation-for="fullname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="email" class="control-label" for="exampleInputEmail1">Email address</label>
+                    <input asp-for="email" class="form-control" type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" tabindex="2" required>
+                    <span asp-validation-for="email" class="text-danger"></span>
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label asp-for="password" class="control-label" for="exampleInputPassword1">Password</label>
+                    <input asp-for="password" class="form-control" type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" tabindex="3" required>
+                    <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+                <p>Already have an account? <a href="/login">Login!</a></p>
+                <button type="submit" class="btn btn-primary" tabindex="4">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            document.getElementById('fullname').focus();
+        };
+
+        //document.addEventListener('keydown', function (event) {
+        //    if (event.key === 'Enter') {
+        //        var activeElement = document.activeElement;
+        //        var formElements = Array.from(document.getElementsByTagName('input')).concat(Array.from(document.getElementsByTagName('button')));
+        //        var nextIndex = formElements.indexOf(activeElement) + 1;
+        //        if (nextIndex < formElements.length) {
+        //            formElements[nextIndex].focus();
+        //            event.preventDefault();
+        //        }
+        //    }
+        //});
+        //$(document).ready(function () {
+        //    $('input, button').keydown(function (e) {
+        //        if (e.which === 13) {
+        //            e.preventDefault();
+        //            var index = $('input, button').index(this) + 1;
+        //            $('input, button').eq(index).focus();
+        //        }
+        //    });
+        //});
+    </script>
+</body>

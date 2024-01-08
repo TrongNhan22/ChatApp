@@ -1,4 +1,5 @@
 ﻿using ChatApp.Models;
+using ChatApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ChatApp.ViewModels;
 using ChatApp.Interface;
@@ -8,7 +9,7 @@ namespace ChatApp.Controllers
     public class MessageController : Controller
     {
         private readonly IMessageRepository _messageRepository;
-      
+
         public MessageController(IMessageRepository messageService)
         {
             _messageRepository = messageService;
