@@ -50,3 +50,10 @@ header {
     max-height: 150px; /* Adjust as needed */
     overflow-y: auto;
 }
+
+.image-frame-nav {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-bottom: 2px;
+}
