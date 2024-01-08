@@ -1,7 +1,8 @@
 ﻿using ChatApp.Models;
-using ChatApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ChatApp.ViewModels;
+using ChatApp.Interface;
+using Microsoft.Extensions.Primitives;
 
 namespace ChatApp.Controllers
 {
@@ -13,39 +14,31 @@ namespace ChatApp.Controllers
         {
             _messageRepository = messageService;
         }
-        public async Task<IActionResult> Index()
-        {
-            return View(new MessageViewModel { });
-        }
         [HttpGet]
-        public async Task<IActionResult>Index(string receiverId = "6534e66f77ca367b832706e6")
+        public async Task<IActionResult>Index()
         {
+            User? currentUser = Globals.user_login;
+            if (Globals.user_login == null)
+            {
+                return Redirect("~/Login");
+            }
             //For testing
-            string senderId = "65340b20b32df212d36f15ad";
-            var messages = await _messageRepository.GetListBySenderAndReceiverIdAsync(senderId, receiverId);
-            var messageViewModel = new MessageViewModel
+            //string senderId = "65340b20b32df212d36f15ad";
+            string senderId = currentUser.id!;
+            var chatPartnerList = await _messageRepository.GetChatPartner();
+            var chatPartner = chatPartnerList.FirstOrDefault()?.id;
+            IEnumerable<Message>? messages = chatPartner == null 
+                ? null 
+                : await _messageRepository.GetListByChatParticipantId(senderId, chatPartner);
+            var chatViewModel = new ChatViewModel
             {
                 SenderId = senderId,
-                ReceiverId = receiverId,
-                Messages = messages
+                ReceiverId = chatPartner,
+                Messages = messages,
+                ChatPartners = chatPartnerList
             };
-            return View(messageViewModel);
+            return View(chatViewModel);
 
-        }
-        [HttpGet("{id:length(24)}")]
-        public async Task<IActionResult> Get()
-        {
-            string senderId = "65340b20b32df212d36f15ad"; string receiverId = "6534e66f77ca367b832706e6";
-            var messages = await _messageRepository.GetListBySenderAndReceiverIdAsync(senderId, receiverId);
-            if (messages is null) return NotFound();
-            var messageViewModel = new MessageViewModel
-            {
-                SenderId = senderId,
-                ReceiverId = receiverId,
-                Messages = messages
-            };
-            return View();
-            return View("Index", messageViewModel);
         }
         //public async Task<IActionResult> Post(MessageViewModel messageViewModel)
         //{

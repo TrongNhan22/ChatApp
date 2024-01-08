@@ -1,4 +1,6 @@
-﻿function createChatBubble(message, name) {
+﻿function createChatBubble(message, senderId) {
+    console.log("Message Sender ID:", message);
+    console.log("Sender ID:", senderId);
     return (message.senderId == "SYSTEM")
         ?
         `
@@ -11,7 +13,7 @@
                     </div>
                 </div>
         `
-        : (message.senderId === name)
+        : (message.senderId == senderId)
             ?
             `
                     <div class="d-flex flex-row justify-content-end" >
@@ -29,9 +31,7 @@
                             <p class="small p-2 ms-3 mb-1 rounded-3" style = "background-color: #f5f6f7;" >
                                 ${message.content}
                             </p>
-                            <p class="small ms-3 mb-3 rounded-3 text-muted float-end">
-                                12: 00 PM | Aug 13
-                            </p>
+                            <p class="small ms-3 mb-3 rounded-3 text-muted float-end">12: 00 PM | Aug 13</p>
                         </div>
                     </div>
             `;
