@@ -32,6 +32,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<ISearchFriendRepository, SearchFriendRepository>();
 builder.Services.AddScoped<ILogin, LoginRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IUpdateUserRepository, UpdateUserRepository>();
 
 var app = builder.Build();
 

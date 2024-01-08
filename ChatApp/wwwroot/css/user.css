@@ -2,13 +2,21 @@
 
 }
 
+
+.userUI {
+    margin: 4rem 0 0;
+}
+
 .image-frame {
-    width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     overflow: hidden;
     border: 1px solid #000;
+}
+
+#buttonSave, #inputAvt {
+    visibility: hidden;
 }
