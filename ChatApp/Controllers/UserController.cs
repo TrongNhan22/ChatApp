@@ -40,7 +40,7 @@ namespace ChatApp.Controllers
             if (account)
             {
                 // If the user exists, redirect to the home page
-                TempData["Noti"] = "New account was created succcessfully!";
+                TempData["Noti"] = "New account was created successfully!";
                 return Redirect("/sign-up");
             }
             // If the user does not exist, redirect back to the login page

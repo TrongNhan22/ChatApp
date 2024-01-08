@@ -55,12 +55,9 @@ namespace ChatApp.Repository
             }
 
             // If user does not exist, insert the new user
-            //await _user.InsertOneAsync(user);
+            await _user.InsertOneAsync(user);
             return true;
         }
-
-
-
     }
 }
 
