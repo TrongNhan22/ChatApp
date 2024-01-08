@@ -19,6 +19,6 @@ namespace ChatApp.Models
         [BsonElement("content")]
         public string? Content { get; set; }
         [BsonElement("date")]
-        public string? Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

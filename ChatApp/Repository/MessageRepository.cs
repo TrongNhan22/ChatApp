@@ -1,9 +1,13 @@
-﻿using ChatApp.Data;
+﻿using AspNetCore.Identity.Mongo.Mongo;
+using ChatApp.Controllers;
+using ChatApp.Data;
 using ChatApp.Interface;
 using ChatApp.Models;
 using ChatApp.ViewModels;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using NuGet.Packaging.Signing;
 using System.Diagnostics.CodeAnalysis;
 
 //https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-8.0&tabs=visual-studio
@@ -23,9 +27,9 @@ namespace ChatApp.Repository
         }
         public async Task<IEnumerable<Message>> GetListAsync() =>
             await _messageCollection.Find(_ => true).ToListAsync();
-        public async Task<IEnumerable<Message>> GetListBySenderAndReceiverIdAsync(string senderId, string receiverId) =>
+        public async Task<IEnumerable<Message>> GetListByChatParticipantId(string userId1, string userId2) =>
             await _messageCollection.Find(
-                x => x.SenderId == senderId && x.ReceiverId == receiverId).ToListAsync();
+                x => x.SenderId == userId1 && x.ReceiverId == userId2 || x.SenderId == userId2 && x.ReceiverId==userId1).ToListAsync();
         public async Task<Message> GetMessageByIdAsync(string id) =>
             await _messageCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         public async Task CreateAsync(Message newMessage) =>
@@ -38,19 +42,20 @@ namespace ChatApp.Repository
         public async Task<IEnumerable<ChatPartnerViewModel>> GetChatPartner()
         {
             //for testing
-            string thisUser = "65340b20b32df212d36f15ad";
-            var chatPartnerList = await _messageCollection.Find(x => x.SenderId == thisUser || x.ReceiverId == thisUser)
-                .Project(x => x.SenderId == thisUser ?
+            User thisUser = Globals.user_login;
+            var chatPartnerList = await _messageCollection.Find(x => x.SenderId == thisUser.id || x.ReceiverId == thisUser.id)
+                .SortByDescending(x => x.Date)
+                .Project(x => x.SenderId == thisUser.id ?
                 new ChatPartnerViewModel
                 {
                     id = x.ReceiverId,
-                    lastInteractionTime = x.Date,
+                    lastInteractionTime = x.Date.ToString(),
                     latestMessage = string.IsNullOrEmpty(x.Content) ? "Hình ảnh" : x.Content
                 } :
                 new ChatPartnerViewModel
                 {
                     id = x.SenderId,
-                    lastInteractionTime = x.Date,
+                    lastInteractionTime = x.Date.ToString(),
                     latestMessage = string.IsNullOrEmpty(x.Content) ? "Hình ảnh" : x.Content
                 })
                 .ToListAsync();
@@ -60,7 +65,7 @@ namespace ChatApp.Repository
                 chatPartnerList[i].avatar = user.avatar;
                 chatPartnerList[i].fullname = user.fullname;
             }
-            return chatPartnerList;
+            return chatPartnerList.DistinctBy(x => x.id);
         }
      
     }
