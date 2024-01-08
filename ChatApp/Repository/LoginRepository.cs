@@ -49,7 +49,7 @@ namespace ChatApp.Repository
             var existingUser = await _user.Find(filter).FirstOrDefaultAsync();
 
             if (existingUser != null)
-            {
+        {
                 // User already exists with the provided email
                 return false;
             }

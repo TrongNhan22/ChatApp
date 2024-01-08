@@ -7,23 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Repositories\**" />
-    <Compile Remove="ViewModels\**" />
     <Content Remove="Api\**" />
     <Content Remove="Database\**" />
-    <Content Remove="Repositories\**" />
-    <Content Remove="ViewModels\**" />
     <EmbeddedResource Remove="Api\**" />
     <EmbeddedResource Remove="Database\**" />
-    <EmbeddedResource Remove="Repositories\**" />
-    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Api\**" />
     <None Remove="Database\**" />
-    <None Remove="Repositories\**" />
-    <None Remove="ViewModels\**" />
-    <Content Remove="appsettings.Development.json" />
-    <Content Remove="appsettings.json" />
-    <Folder Include="wwwroot\lib\signalr\" />
+	<Folder Include="Services\" />
+	<Folder Include="wwwroot\lib\signalr\" />
   </ItemGroup>
 
   <ItemGroup>

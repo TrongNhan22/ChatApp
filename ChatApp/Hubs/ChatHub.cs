@@ -1,4 +1,5 @@
-﻿using ChatApp.Models;
+﻿using ChatApp.Interfaces;
+using ChatApp.Models;
 using Microsoft.AspNetCore.SignalR;
 using SignalRChatDemo.Models;
 
@@ -7,12 +8,23 @@ namespace ChatApp.Hubs
     public class ChatHub : Hub
     {
         private readonly static ConnectionMapping <string> _connections = new();
+        private readonly IMessageRepository messageRepository;
+
+        public ChatHub(IMessageRepository messageRepository)
+        {
+            this.messageRepository = messageRepository;
+        }
         public async Task Send(Message message)
         {
             // Call the broadcastMessage method to update clients.
             await Clients.All.SendAsync("broadcastMessage", message);
         }
-
+        public async Task SendPrivate(Message message)
+        {
+            await messageRepository.CreateAsync(message);
+            //Then SendAsync to all ClientID of that connectionId
+            await Clients.All.SendAsync("receivePrivate", message);
+        }
         public override async Task OnConnectedAsync()
         {
             var userList = _connections.GetUsers();
