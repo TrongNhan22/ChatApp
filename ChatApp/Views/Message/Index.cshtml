@@ -39,32 +39,31 @@
                                                 <i class="fas fa-search"></i>
                                             </span>
                                         </div>
-                                        <div>
-                                            <a type="button" asp-controller="Message" asp-action="Index">Test messageDB</a>
-                                        </div>
                                         <div data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px; overflow-y: scroll">
                                             <ul class="scrollable list-unstyled mb-0">
                                                 <!--This is where online user and/or groups will be-->
                                                 @if (Model.ChatPartners != null && Model.ChatPartners.Count() > 0)
+                                                {
                                                     @foreach (var chatPartner in Model.ChatPartners)
-                                                    {
-                                                        <li class="p-2 border-bottom" style="background-color: #eee;">
-                                                            <a href="#!" class="d-flex justify-content-between">
+                                                    {                                                        
+                                                        <li class="p-2 border-bottom" style="@(chatPartner.id==Model.CurrentChatParterId?"background-color: #eee;":"")">
+                                                            <a class="d-flex justify-content-between" asp-controller="Message" asp-action="Index" asp-route-receiverId="@chatPartner.id">
                                                                 <div class="d-flex flex-row">
                                                                     <img src="@chatPartner.avatar" alt="avatar"
-                                                                         class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" style="width: 60px; height: 60px;">
+                                                                    class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" style="width: 60px; height: 60px;">
                                                                     <div class="pt-1">
                                                                         <p class="fw-bold mb-0">@chatPartner.fullname</p>
                                                                         <p class="small text-muted">@chatPartner.latestMessage<p>
                                                                     </div>
                                                                 </div>
                                                                 <div class="pt-1">
-                                                                    <p class="small text-muted mb-1">Just now</p>
+                                                                    <p class="small text-muted mb-1">@chatPartner.lastInteractionTime.ToString("g")</p>
                                                                     <span class="badge bg-danger float-end">1</span>
                                                                 </div>
                                                             </a>
                                                         </li>
                                                     }
+                                                }
                                         </div>
 
                                     </div>
@@ -97,7 +96,7 @@
                                                             <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
                                                                 @message.Content
                                                             </p>
-                                                            <p class="small me-3 mb-3 rounded-3 text-muted">@message.Date.ToString("f")</p>
+                                                            <p class="small me-3 mb-3 rounded-3 text-muted">@message.Date.ToString("g")</p>
                                                         </div>
                                                     </div>
                                                 }
@@ -109,7 +108,7 @@
                                                             <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
                                                                 @message.Content
                                                             </p>
-                                                            <p class="small me-3 mb-3 rounded-3 text-muted">@message.Date.ToString("f") </p>
+                                                            <p class="small me-3 mb-3 rounded-3 text-muted">@message.Date.ToString("g") </p>
                                                         </div>
                                                     </div>
                                                 }
@@ -143,7 +142,6 @@
     <!--Add script to update the page and send messages.-->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var connectedUserList = [];
             var messageInput = document.getElementById('messageInput');
             var senderId = "@Model.SenderId";
             var receiverId = "@Model.ReceiverId";

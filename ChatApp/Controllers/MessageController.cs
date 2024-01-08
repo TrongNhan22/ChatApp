@@ -15,7 +15,7 @@ namespace ChatApp.Controllers
             _messageRepository = messageService;
         }
         [HttpGet]
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult>Index(string? receiverId)
         {
             User? currentUser = Globals.user_login;
             if (Globals.user_login == null)
@@ -26,16 +26,19 @@ namespace ChatApp.Controllers
             //string senderId = "65340b20b32df212d36f15ad";
             string senderId = currentUser.id!;
             var chatPartnerList = await _messageRepository.GetChatPartner();
-            var chatPartner = chatPartnerList.FirstOrDefault()?.id;
-            IEnumerable<Message>? messages = chatPartner == null 
+            var chatPartnerId = string.IsNullOrEmpty(receiverId)
+                ? chatPartnerList.FirstOrDefault()?.id
+                : receiverId;
+            IEnumerable<Message>? messages = chatPartnerId == null 
                 ? null 
-                : await _messageRepository.GetListByChatParticipantId(senderId, chatPartner);
+                : await _messageRepository.GetListByChatParticipantId(senderId, chatPartnerId);
             var chatViewModel = new ChatViewModel
             {
                 SenderId = senderId,
-                ReceiverId = chatPartner,
+                ReceiverId = chatPartnerId,
                 Messages = messages,
-                ChatPartners = chatPartnerList
+                ChatPartners = chatPartnerList,
+                CurrentChatParterId = chatPartnerId
             };
             return View(chatViewModel);
 

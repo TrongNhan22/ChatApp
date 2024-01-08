@@ -9,6 +9,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using NuGet.Packaging.Signing;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 //https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-8.0&tabs=visual-studio
 namespace ChatApp.Repository
@@ -49,13 +50,13 @@ namespace ChatApp.Repository
                 new ChatPartnerViewModel
                 {
                     id = x.ReceiverId,
-                    lastInteractionTime = x.Date.ToString(),
+                    lastInteractionTime = x.Date,
                     latestMessage = string.IsNullOrEmpty(x.Content) ? "Hình ảnh" : x.Content
                 } :
                 new ChatPartnerViewModel
                 {
                     id = x.SenderId,
-                    lastInteractionTime = x.Date.ToString(),
+                    lastInteractionTime = x.Date,
                     latestMessage = string.IsNullOrEmpty(x.Content) ? "Hình ảnh" : x.Content
                 })
                 .ToListAsync();

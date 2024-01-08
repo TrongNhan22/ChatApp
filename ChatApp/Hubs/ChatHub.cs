@@ -5,6 +5,7 @@ using ChatApp.ViewModels;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Bson;
 using SignalRChatDemo.Models;
+using System.Globalization;
 
 namespace ChatApp.Hubs
 {
@@ -35,7 +36,7 @@ namespace ChatApp.Hubs
                 SenderId = message.SenderId,
                 Content = message.Content,
                 Media = message.Media,
-                Date = message.Date.ToString("f"),
+                Date = message.Date.ToString("g")
             };
             //Send message to all receiver connections
             foreach (var connection in _connections.GetConnections(message.ReceiverId))
