@@ -33,7 +33,7 @@
         </div>
         <div style="margin-bottom:20px, display: flex, flex-direction: row, justify-content: center">
             <div id="div-chat">
-                <button type="button"  class='btn-chat' id="btn-chat" onClick="openChat()">Nhắn tin</button>
+                <button type="button"  class='btn-chat' id="btn-chat" onClick="openChat('@Model.User.id')">Nhắn tin</button>
             </div>
             <div class="btn-group" id="div-btn">
                 @if ((Model.Relationship == null || Model.Relationship.id == null) && Model.FriendRequest.id == null)
@@ -169,6 +169,10 @@
                 console.error(data.message);
             }
         });
+    }
+
+    function openChat(id){
+          window.location.href = "/Message?receiverId="+id;
     }
 
 </script>
