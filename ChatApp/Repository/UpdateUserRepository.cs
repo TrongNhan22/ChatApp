@@ -2,17 +2,33 @@
 using ChatApp.Interface;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ChatApp.Data;
+using Microsoft.Extensions.Options;
+using ChatApp.Models;
+using ChatApp.Interface;
 
 namespace ChatApp.Repository
 {
     public class UpdateUserRepository : IUpdateUserRepository
     {
-        public Task<User> GetUserById(string id)
+        private readonly IOptions<MongoDBSetting> _mongoDBSettting;
+        private readonly IMongoCollection<User> _user;
+
+        public UpdateUserRepository(IOptions<MongoDBSetting> mongoDBSettting)
         {
-            throw new NotImplementedException();
+            _mongoDBSettting = mongoDBSettting;
+            MongoClient mongoClient = new MongoClient(_mongoDBSettting.Value.ConnectionURI);
+            IMongoDatabase mongoDatabase = mongoClient.GetDatabase(_mongoDBSettting.Value.DatabaseName);
+            _user = mongoDatabase.GetCollection<User>(_mongoDBSettting.Value.userCollectionName);
+        }
+        public async Task<User> GetUserById(string id)
+        {
+            var filter = Builders<User>.Filter.Eq("id", id);
+            User userUpdate = await _user.Find(filter).FirstOrDefaultAsync();
+            return userUpdate;
         }
 
-        public void UpdateUser(string id, string fullname, string gender, string birhtday, string email)
+        public async void UpdateUser(string id, string fullname, string gender, string birhtday, string email)
         {
             var filter = Builders<User>.Filter.Eq("id", ObjectId.Parse(id));
             var update = Builders<User>.Update
@@ -20,6 +36,19 @@ namespace ChatApp.Repository
                 .Set(u => u.email, email)
                 .Set(u => u.gender, gender)
                 .Set(u => u.birthday, birhtday);
+            //User user = this.GetUserById(id);
+            //var result = await user.UpdateOne(filter, update);
+            var updateResult = await _user.UpdateOneAsync(filter, update);
+            if (updateResult.IsAcknowledged && updateResult.ModifiedCount > 0)
+            {
+                // Cập nhật thành công
+                Console.WriteLine("Thông tin người dùng đã được cập nhật thành công.");
+            }
+            else
+            {
+                // Cập nhật không thành công
+                Console.WriteLine("Đã xảy ra lỗi khi cập nhật thông tin người dùng.");
+            }
         }
     }
 }
