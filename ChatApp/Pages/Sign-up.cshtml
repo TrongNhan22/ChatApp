@@ -45,11 +45,19 @@
                     <span asp-validation-for="email" class="text-danger"></span>
                     @* <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> *@
                 </div>
-                <div class="form-group">
+@*                <div class="form-group">
                     <label asp-for="password" class="control-label" for="exampleInputPassword1">Mật khẩu</label>
                     <input asp-for="password" class="form-control" type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập mật khẩu" tabindex="3" required>
                     <span asp-validation-for="password" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <label asp-for="password" class="control-label" for="exampleInputPassword1">Mật khẩu</label>
+                    <input asp-for="password" class="form-control" type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập mật khẩu" tabindex="3" required
+                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}"
+                           title="Mật khẩu phải chứa ít nhất 6 ký tự, bao gồm cả chữ cái và số, chữ cái viết hoa và 1 ký tự đặc biệt.">
+                    <span asp-validation-for="password" class="text-danger"></span>
                 </div>
+               
                 <p class="text-right">Bạn đã có tài khoản? <a href="/login">Đăng nhập!</a></p>
                 <div class="text-center">
 

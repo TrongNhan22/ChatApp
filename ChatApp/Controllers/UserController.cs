@@ -28,8 +28,7 @@ namespace ChatApp.Controllers
                 return Redirect("/");
             }
             // If the user does not exist, redirect back to the login page
-            TempData["Error"] = "Email hoặc mật khẩu không đúng!";
-            //user.isLogin = 0;
+            TempData["Error"] = "Tài khoản hoặc mật khẩu không đúng!";
             return Redirect("/Login");
         }
 

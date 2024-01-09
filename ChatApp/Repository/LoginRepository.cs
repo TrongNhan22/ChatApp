@@ -55,6 +55,10 @@ namespace ChatApp.Repository
             }
 
             // If user does not exist, insert the new user
+            user.birthday = "";
+            user.gender = "";
+            user.avatar = "https://images.app.goo.gl/E1cmA6H1Xv2ErE5GA";
+
             await _user.InsertOneAsync(user);
             return true;
         }
