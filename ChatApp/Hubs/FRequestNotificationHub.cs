@@ -1,6 +1,8 @@
-﻿namespace ChatApp.Hubs
+﻿using Microsoft.AspNetCore.SignalR;
+
+namespace ChatApp.Hubs
 {
-    public class FRequestNotificationHub
+    public class FRequestNotificationHub : Hub
     {
     }
 }
