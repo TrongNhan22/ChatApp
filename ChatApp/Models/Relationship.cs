@@ -1,17 +1,24 @@
-﻿using MongoDB.Bson;
+﻿using ChatApp.Models;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
-namespace ChatApp.Models
+namespace AddFriend.Models
 {
     public class Relationship
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("_id")]
-        public string Id { get; set; }
+        public string? id { get; set; }
         [BsonElement("userId")]
-        public string UserId { get; set; }
+        [JsonPropertyName("userId")]
+        public string? userId { get; set; }
+        [BsonIgnoreIfNull]
+        public User? user { get; set; }
         [BsonElement("friendId")]
-        public string FriendId { get; set; }
+        [JsonPropertyName("friendId")]
+        public string? friendId { get; set; }
+        [BsonIgnoreIfNull]
+        public User? friend { get; set; }
     }
 }

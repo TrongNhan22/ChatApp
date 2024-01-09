@@ -1,0 +1,200 @@
+﻿.containerUser {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px;
+    border: 2px solid #D9D9D9;
+    width: 600px;
+    padding: 0 0 30px 0;
+}
+
+.formUser {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2em;
+}
+
+.input-group label {
+    margin-bottom: 0.5em;
+    color: #1C0F1E;
+}
+
+.input-group input{
+    min-width: 400px;
+    min-height: 40px;
+}
+
+
+
+.btn-add,
+.btn-friend,
+.btn-chat,
+.btn-cancel-request,
+.btn-accept-request {
+    align-items: center;
+    background-clip: padding-box;
+    border: none;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 1px 3px 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.25;
+    margin: 5px 0 5px 0;
+    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+    position: relative;
+    text-decoration: none;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+
+/*Button Accept request*/
+.btn-accept-request {
+    background-color: rgba(117, 182, 255,0.6);
+    color: #3282F6;
+}
+
+.btn-accept-request:hover {
+    background-color: rgba(117, 182, 255, 0.5);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    
+}
+
+
+.btn-accept-request:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn-accept-request:active {
+    background-color: rgba(117, 182, 255, 0.7);
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+
+/*Button Add Friend*/
+.btn-add {
+    background-color: rgba(117, 182, 255,0.6);
+    color: #3282F6;
+}
+
+.btn-add:hover {
+    background-color: rgba(117, 182, 255, 0.5);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+
+.btn-add:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn-add:active {
+    background-color: rgba(117, 182, 255, 0.7);
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+/*Button Friend*/
+.btn-friend {
+    background-color: rgba(127, 127, 127,0.6);
+    color: white;
+}
+
+.btn-friend:hover {
+    background-color: rgba(127, 127, 127, 0.5);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+
+.btn-friend:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn-friend:active {
+    background-color: rgba(127, 127, 127, 0.7);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+.btn{
+    min-width: 50px !important;
+}
+
+
+/*Cancel friendrequest button*/
+.btn-cancel-request {
+    background-color: rgba(240,128,128,0.4);
+    color: #F08080;
+}
+
+.btn-cancel-request:hover {
+    background-color: rgba(240,128,128,0.3);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+
+.btn-cancel-request:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn-cancel-request:active {
+    background-color: rgba(240,128,128,0.5);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+
+/*Button Chat*/
+.btn-chat {
+    background-color: rgba(102,255,0,0.4);
+    color: #07E000;
+}
+
+.btn-chat:hover {
+    background-color: rgba(102,255,0,0.3);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+
+.btn-chat:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn-chat:active {
+    background-color: rgba(102,255,0,0.5);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+
+
+/*Button group*/
+
+.btn-add,
+.btn-friend,
+.btn-cancel-request {
+    position: absolute;
+    visibility: hidden
+}
