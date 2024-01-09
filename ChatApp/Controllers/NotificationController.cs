@@ -19,8 +19,13 @@ namespace ChatApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (Globals.user_login == null)
+            {
+                return Redirect("~/Login");
+            }
+            string currentId = Globals.user_login.id;
             List<FriendRequest> friendRequests;
-            friendRequests = await _notification.GetListRequestAsync("6585901a24c2c50f943af18e");
+            friendRequests = await _notification.GetListRequestAsync(currentId);
             List<UserRelationshipModel> userRelationship = new List<UserRelationshipModel>();
 
             if(friendRequests.Count > 0)
@@ -39,7 +44,8 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CancelRequest(string receiverId)
         {
-            var result = await _notification.CancelRequestAsync("6585901a24c2c50f943af18e", receiverId);
+            string currentId = Globals.user_login.id;
+            var result = await _notification.CancelRequestAsync(currentId, receiverId);
 
             if (result)
             {
@@ -54,7 +60,8 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AcceptRequest(string makerId)
         {
-            var result = await _notification.AcceptRequestAsync("6585901a24c2c50f943af18e", makerId);
+            string currentId = Globals.user_login.id;
+            var result = await _notification.AcceptRequestAsync(currentId, makerId);
 
             if (result)
             {

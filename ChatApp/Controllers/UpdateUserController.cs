@@ -3,6 +3,7 @@ using ChatApp.Models;
 using System.Globalization;
 using ChatApp.Interface;
 using Microsoft.Build.Logging;
+using AddFriend.Models;
 
 namespace ChatApp.Controllers
 {
@@ -20,23 +21,33 @@ namespace ChatApp.Controllers
         //    _logger = logger;
         //}
 
-        public IActionResult Index()
-        {  
-            return View(user);
+        
+        public async Task<IActionResult> Index()
+        {
+            User u = new User();
+            if (user.id != null) {
+                u = await _repository.GetUserById(user.id);
+            }
+            
+            return View(u);
         }
 
         [HttpPost]
-        public IActionResult UpdateUserInfor(User updatedUser)
+        public async Task<IActionResult> UpdateUserInfor(string id, string fullname, string gender, string birthday, string email)
         {
-            if (ModelState.IsValid)
+            var result = await _repository.UpdateUser(id, fullname, gender, birthday, email);
+
+            if (result)
             {
-                var result = _repository.UpdateUser(updatedUser.id, updatedUser.fullname, updatedUser.gender, updatedUser.birthday, updatedUser.email);
-
-                    return NoContent();
+                // Trả về một phản hồi thành công
+                return Json(new { success = true });
             }
+            else
+            {
+                // Trả về một lỗi nếu không tìm thấy mối quan hệ
+                return Json(new { success = false, message = "Không thể cập nhật dữ liệu." });
 
-            return BadRequest(ModelState);
-
+            }
         }
     }
 }
