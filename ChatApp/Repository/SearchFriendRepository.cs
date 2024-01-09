@@ -16,7 +16,6 @@ namespace ChatApp.Repository
         private readonly IMongoCollection<Relationship> _relationship;
         private readonly IMongoCollection<FriendRequest> _friendRequests;
 
-
         public SearchFriendRepository(IOptions<MongoDBSetting> mongoDBSettting)
         {
             _mongoDBSettting = mongoDBSettting;
@@ -26,6 +25,7 @@ namespace ChatApp.Repository
             _relationship = database.GetCollection<Relationship>(_mongoDBSettting.Value.relationshipCollectionName);
             _friendRequests = database.GetCollection<FriendRequest>(_mongoDBSettting.Value.friendRequestCollectionName);
         }
+
 
         public async Task<List<User>> GetUserByNameAsync(string userName)
         {

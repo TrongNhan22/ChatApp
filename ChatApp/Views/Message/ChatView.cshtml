@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div id="chatbox" class="pt-3 pe-3 scrollable" data-mdb-perfect-scrollbar="true"
+     style="position: relative; height: 400px; overflow-y: scroll">
+    @if (Model is not null && Model.Messages is not null)
+        //Chat fetched from MongoDB
+        @foreach (var message in Model.Messages)
+        {
+            @if (message.SenderId == "SYSTEM")
+            {
+                <div class="d-flex flex-row justify-content-center">
+                    <div>
+                        <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #a3ffb4;">
+                            @message.Content
+                        </p>
+                    </div>
+                </div>
+            }
+            else if (message.SenderId == Model.SenderId)
+            {
+                <div class="d-flex flex-row justify-content-end">
+                    <div>
+                        <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                            @message.Content
+                        </p>
+                        <p class="small me-3 mb-3 rounded-3 text-muted"> 12: 00 PM | Aug 13 </p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-row justify-content-start">
+                    <p>@message.SenderId </p>
+                    <div>
+                        <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
+                            @message.Content
+                        </p>
+                        <p class="small ms-3 mb-3 rounded-3 text-muted float-end">
+                            12: 00 PM | Aug 13
+                        </p>
+                    </div>
+                </div>
+            }
+        }
+    <!--This is where chat content sent from SignalR will be-->
+</div>

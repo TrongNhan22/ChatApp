@@ -1,4 +1,88 @@
 ﻿@page
-@model ChatApp.Pages.Sign_upModel
+@using ChatApp.Models
+@model User
+@*@model ChatApp.Pages.Sign_upModel*@
 @{
+    Layout = null;
 }
+<head>
+    <link rel="stylesheet" type="text/css" href="./css/Login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <div class="row container d-flex justify-content-center align-items-center vh-100">
+
+        <div class="col-md-6 offset-3 bg-light border rounded d-inline-block">
+            <p>
+                <h4 class="text-center">Tạo tài khoản mới</h4>
+            </p>
+            @if (TempData["Error"] != null)
+            {
+                <div class="col-md-12 alert alert-danger">
+                    <span><b>Xin lỗi!</b> - @TempData["Error"]</span>
+                </div>
+            }
+            @if (TempData["Noti"] != null)
+            {
+                <div class="col-md-12 alert alert-success">
+                    <span><b>Yayy!</b> - @TempData["Noti"]</span>
+                </div>
+            }
+            <form method="post" asp-controller="User" asp-action="Signup">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="fullname" class="control-label" for="exampleInputEmail1">Họ và tên</label>
+                    <input asp-for="fullname" class="form-control" name="fullname" class="form-control" id="fullname" placeholder="Nhập họ và tên của bạn" tabindex="1" required>
+                    <span asp-validation-for="fullname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="email" class="control-label" for="exampleInputEmail1">Địa chỉ email</label>
+                    <input asp-for="email" class="form-control" type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập email" tabindex="2" required>
+                    <span asp-validation-for="email" class="text-danger"></span>
+                    @* <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> *@
+                </div>
+                <div class="form-group">
+                    <label asp-for="password" class="control-label" for="exampleInputPassword1">Mật khẩu</label>
+                    <input asp-for="password" class="form-control" type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập mật khẩu" tabindex="3" required>
+                    <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+                <p class="text-right">Bạn đã có tài khoản? <a href="/login">Đăng nhập!</a></p>
+                <div class="text-center">
+
+                    <button type="submit" class="btn btn-primary" tabindex="4">Đăng ký</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            document.getElementById('fullname').focus();
+        };
+
+                //document.addEventListener('keydown', function (event) {
+                //    if (event.key === 'Enter') {
+                //        var activeElement = document.activeElement;
+                //        var formElements = Array.from(document.getElementsByTagName('input')).concat(Array.from(document.getElementsByTagName('button')));
+                //        var nextIndex = formElements.indexOf(activeElement) + 1;
+                //        if (nextIndex < formElements.length) {
+                //            formElements[nextIndex].focus();
+                //            event.preventDefault();
+                //        }
+                //    }
+                //});
+                //$(document).ready(function () {
+                //    $('input, button').keydown(function (e) {
+                //        if (e.which === 13) {
+                //            e.preventDefault();
+                //            var index = $('input, button').index(this) + 1;
+                //            $('input, button').eq(index).focus();
+                //        }
+                //    });
+                //});
+    </script>
+</body>

@@ -10,5 +10,6 @@ namespace ChatApp.Data
         public string? userCollectionName { get; set; }
         public string? relationshipCollectionName { get; set; }
         public string? friendRequestCollectionName { get; set; }
+        public string MessageCollectionName { get; set; } = null!;
     }
 }
