@@ -40,11 +40,11 @@ namespace ChatApp.Controllers
             if (account)
             {
                 // If the user exists, redirect to the home page
-                TempData["Noti"] = "Tạo tài khoản mới thành công!";
-                return Redirect("/sign-up");
+                TempData["Noti"] = "Tạo tài khoản thành công!";
+                return Redirect("/login");
             }
             // If the user does not exist, redirect back to the login page
-            TempData["Error"] = "Email này đã được sử dụng!";
+            TempData["Error"] = "Email đã được sử dụng!";
             return Redirect("/sign-up");
         }
     }

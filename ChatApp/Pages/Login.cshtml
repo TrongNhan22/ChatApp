@@ -22,7 +22,7 @@
             @if (TempData["Error"] != null)
             {
                 <div class="col-md-12 alert alert-danger">
-                    <span><b>Sorry!</b> - @TempData["Error"]</span>
+                    <span><b>Lỗi!</b> - @TempData["Error"]</span>
                 </div>
             }
             <form method="post" asp-controller="User" asp-action="Login">

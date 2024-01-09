@@ -1,4 +1,5 @@
-﻿using AspNetCore.Identity.Mongo.Mongo;
+﻿using AddFriend.Models;
+using AspNetCore.Identity.Mongo.Mongo;
 using ChatApp.Controllers;
 using ChatApp.Data;
 using ChatApp.Interface;
@@ -9,6 +10,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using NuGet.Packaging.Signing;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 //https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-8.0&tabs=visual-studio
 namespace ChatApp.Repository
@@ -17,6 +19,8 @@ namespace ChatApp.Repository
     {
         private readonly IMongoCollection<Message> _messageCollection;
         private readonly IMongoCollection<User> _userCollection;
+        private readonly IMongoCollection<Relationship> _relationshipCollection;
+
         public MessageRepository(IOptions<MongoDBSetting> mongoDBSetting)
         {
             var mongoClient = new MongoClient(mongoDBSetting.Value.ConnectionURI);
@@ -24,6 +28,7 @@ namespace ChatApp.Repository
 
             _messageCollection = mongoDatabase.GetCollection<Message>(mongoDBSetting.Value.MessageCollectionName);
             _userCollection = mongoDatabase.GetCollection<User>(mongoDBSetting.Value.userCollectionName);
+            _relationshipCollection = mongoDatabase.GetCollection<Relationship>(mongoDBSetting.Value.RelationshipCollectionName);
         }
         public async Task<IEnumerable<Message>> GetListAsync() =>
             await _messageCollection.Find(_ => true).ToListAsync();
@@ -49,16 +54,23 @@ namespace ChatApp.Repository
                 new ChatPartnerViewModel
                 {
                     id = x.ReceiverId,
-                    lastInteractionTime = x.Date.ToString(),
+                    lastInteractionTime = x.Date,
                     latestMessage = string.IsNullOrEmpty(x.Content) ? "Hình ảnh" : x.Content
                 } :
                 new ChatPartnerViewModel
                 {
                     id = x.SenderId,
-                    lastInteractionTime = x.Date.ToString(),
+                    lastInteractionTime = x.Date,
                     latestMessage = string.IsNullOrEmpty(x.Content) ? "Hình ảnh" : x.Content
                 })
                 .ToListAsync();
+            chatPartnerList.AddRange(
+                await _relationshipCollection.Find(x => x.userId == thisUser.id)
+                .Project(x => new ChatPartnerViewModel
+                {
+                    id = x.friendId,
+                })
+                .ToListAsync());
             for (int i = 0; i < chatPartnerList.Count; i++)
             {
                 var user = await _userCollection.Find(x=> x.id== chatPartnerList[i].id).FirstOrDefaultAsync();

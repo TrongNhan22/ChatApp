@@ -1,65 +1,60 @@
 ﻿using AddFriend.Models;
 using ChatApp.Data;
+using ChatApp.Interface;
 using ChatApp.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace ChatApp.Repository
 {
-    public class SearchFriendRepository : ISearchFriendRepository
+    public class FriendRepository : IFriendRepository
     {
-        private readonly IOptions<MongoDBSetting> _mongoDBSettting;
+        private readonly IOptions<MongoDBSetting> _mongo;
         private readonly IMongoCollection<User> _user;
         private readonly IMongoCollection<Relationship> _relationship;
         private readonly IMongoCollection<FriendRequest> _friendRequests;
+        
 
-        public SearchFriendRepository(IOptions<MongoDBSetting> mongoDBSettting)
+        public FriendRepository(IOptions<MongoDBSetting> mongo)
         {
-            _mongoDBSettting = mongoDBSettting;
-            MongoClient client = new MongoClient(_mongoDBSettting.Value.ConnectionURI);
-            IMongoDatabase database = client.GetDatabase(_mongoDBSettting.Value.DatabaseName);
-            _user = database.GetCollection<User>(_mongoDBSettting.Value.userCollectionName);
-            _relationship = database.GetCollection<Relationship>(_mongoDBSettting.Value.relationshipCollectionName);
-            _friendRequests = database.GetCollection<FriendRequest>(_mongoDBSettting.Value.friendRequestCollectionName);
+            _mongo = mongo;
+            MongoClient client = new MongoClient(_mongo.Value.ConnectionURI);
+            IMongoDatabase database = client.GetDatabase(_mongo.Value.DatabaseName);
+            _user = database.GetCollection<User>(_mongo.Value.userCollectionName);
+            _relationship = database.GetCollection<Relationship>(_mongo.Value.relationshipCollectionName);
+            _friendRequests = database.GetCollection<FriendRequest>(_mongo.Value.friendRequestCollectionName);
         }
 
-
-        public async Task<List<User>> GetUserByNameAsync(string userName)
+        public async Task<User> GetUserAsync(string id)
         {
-            var filter = Builders<User>.Filter.Regex("fullname", new MongoDB.Bson.BsonRegularExpression(userName, "i")); // Case-insensitive search on 'name' field
-            return await _user.Find(filter).ToListAsync();
+            var filter = Builders<User>.Filter.Eq("id", id);
+            User user = new User();
+            user = await _user.Find(filter).FirstOrDefaultAsync();
+            return user;
         }
 
-        public async Task<List<User>> GetUsersAsync()
+        public async Task<Relationship> GetRelationshipAsync(string id)
         {
-            var filter = Builders<User>.Filter.Ne(u => u.fullname, null);
-            return await _user.Find(filter).ToListAsync();
-        }
-
-        public async Task<Relationship> GetRelationshipAsync(string userId, string friendId)
-        {
-            var filter = Builders<Relationship>.Filter.Eq("userId", userId) & Builders<Relationship>.Filter.Eq("friendId", friendId);
+            var filter = Builders<Relationship>.Filter.Eq("id", id);
             return await _relationship.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<FriendRequest> GetRequestAsync(string makerId, string receiverId)
+        public async Task<bool> DeleteRelationship(Relationship relationship)
         {
-            var filter = Builders<FriendRequest>.Filter.Eq("makerId", makerId) &
-                Builders<FriendRequest>.Filter.Eq("receiverId", receiverId);
+            var filter1 = Builders<Relationship>.Filter.Eq(rl => rl.id,  relationship.id);
+            var filter2 = Builders<Relationship>.Filter.Eq(rl => rl.userId, relationship.friendId) &
+                Builders<Relationship>.Filter.Eq(rl => rl.friendId, relationship.userId);
+            //Because the relationship is 2 way direction so we need to delete 2 of them
+            
+            var deleteResult1 = await _relationship.DeleteOneAsync(filter1);
+            var deleteResult2 = await _relationship.DeleteOneAsync(filter2);
 
-            FriendRequest fr = await _friendRequests.Find(filter).FirstOrDefaultAsync();
+            var result = deleteResult1.IsAcknowledged && deleteResult1.DeletedCount > 0 && deleteResult2.IsAcknowledged && deleteResult2.DeletedCount > 0;
 
-            if (fr == null)
-            {
-                fr = new FriendRequest();
-            }
-
-            return fr;
+            return result;
         }
-
+        
         public async Task<bool> CreateFriendRequest(string makerId, string receiverId)
         {
             var filter = Builders<FriendRequest>.Filter.Eq("makerId", makerId) &
@@ -76,7 +71,7 @@ namespace ChatApp.Repository
                 //have someone sent you a friendrequest!
                 return false;
             }
-            else if (fr != null)
+            else if(fr != null)
             {
                 return true;
             }
@@ -99,6 +94,21 @@ namespace ChatApp.Repository
                     return false; // Trả về false nếu có lỗi
                 }
             }
+        }
+
+        public async Task<FriendRequest> GetRequestAsync(string makerId, string receiverId)
+        {
+            var filter = Builders<FriendRequest>.Filter.Eq("makerId", makerId) &
+                Builders<FriendRequest>.Filter.Eq("receiverId", receiverId);
+
+            FriendRequest fr = await _friendRequests.Find(filter).FirstOrDefaultAsync();
+
+            if(fr == null )
+            {
+                fr = new FriendRequest();
+            }
+
+            return fr;
         }
 
         public async Task<bool> CancelRequestAsync(string makerId, string receiverId)
@@ -127,7 +137,7 @@ namespace ChatApp.Repository
             var relationship1 = new Relationship() { userId = makerId, friendId = receiverId };
             var relationship2 = new Relationship() { friendId = makerId, userId = receiverId };
 
-            if (rl1 != null && rl2 != null)
+            if(rl1 != null && rl2 != null)
             {
                 return false;
             }
@@ -147,6 +157,5 @@ namespace ChatApp.Repository
                 }
             }
         }
-
     }
 }

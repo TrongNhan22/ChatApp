@@ -10,7 +10,7 @@ namespace ChatApp.ViewModels
         public string id { get; set; } = null!;
         public string? avatar { get; set; }
         public string? fullname { get; set; }
-        public string? lastInteractionTime { get; set; }
+        public DateTime? lastInteractionTime { get; set; }
         public string? latestMessage { get; set;}
         public int? UnseenMessageCount { get; set; }    
     }
