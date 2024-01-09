@@ -28,18 +28,19 @@
     // else gd = "female";
 }
 <head>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/Layout.css" />
     <link rel="stylesheet" href="/css/user.css" />
+    
 </head>
 
 <div class="userUI border">
 
     <h4 class="mt-3 text-center text-white-50">Thông tin người dùng</h4>
-    <form form method="post" action="/UpdateUser/UpdateUserInfor" asp-route-updatedUser="{@Model}" id="myForm" class="row g-3 mt-2">
+    <form id="myForm" class="row g-3 mt-2">
         @Html.AntiForgeryToken()
         <div class="col-md-6 justify-content-center d-flex align-items-center flex-column">
             <img src="@Model.avatar" src="@Model.fullname" class="image-frame" />
@@ -49,12 +50,12 @@
         <div class="col-md-6 rounded">
             <div class="col-12">
                 <label for="inputUserName" class="form-label">Họ và tên</label>
-                <input asp-for="fullname" type="text" class="form-control" value="@Model.fullname" id="inputUserName">
+                <input asp-for="fullname" type="text" class="form-control" value="@Model.fullname" id="inputUserName" disabled>
                 <span asp-validation-for="fullname" class="text-danger"></span>
             </div>
             <div class="col-12">
                 <label for="inputGender" class="form-label">Giới tính</label>
-                <select asp-for="gender" class="form-control" id="inputGender" name="gender">
+                <select asp-for="gender" class="form-control" id="inputGender" name="gender" disabled>
                     <span asp-validation-for="gender" class="text-danger"></span>
                     @{
                         if (Model.gender == "1")
@@ -71,12 +72,12 @@
                 </select>
             </div><div class="col-12">
                 <label for="inputBirthday" class="form-label">Ngày sinh</label>
-                <input asp-for="birthday" type="date" class="form-control" value="@birthDay.ToString("yyyy-MM-dd")" id="inputBirthday">
+                <input asp-for="birthday" type="date" class="form-control" value="@birthDay.ToString("yyyy-MM-dd")" id="inputBirthday" disabled>
                 <span asp-validation-for="birthday" class="text-danger"></span>
             </div>
             <div class="col-12">
                 <label for="inputEmail" class="form-label">Địa chỉ Email</label>
-                <input asp-for="email" type="email" value="@Model.email" class="form-control" id="inputEmail">
+                <input asp-for="email" type="email" value="@Model.email" class="form-control" id="inputEmail" disabled>
                 <span asp-validation-for="email" class="text-danger"></span>
             </div>
         </div>
@@ -96,7 +97,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" onclick="cancelSave()" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" onClick="saveData()">Ok</button>
+                        <button type="submit" class="btn btn-primary" onClick="saveData('@Model.id')">Ok</button>
                     </div>
                 </div>
             </div>
@@ -107,10 +108,10 @@
 
 <script>
     function toggleEditMode() {
-        // var inputusername = document.getElementById("inputUserName");
-        // var inputgender = document.getElementById("inputGender");
-        // var inputbirthday = document.getElementById("inputBirthday");
-        // var inputemail = document.getElementById("inputEmail");
+        var inputusername = document.getElementById("inputUserName");
+        var inputgender = document.getElementById("inputGender");
+        var inputbirthday = document.getElementById("inputBirthday");
+        var inputemail = document.getElementById("inputEmail");
         var inputAvatar = document.getElementById("inputAvt");
         var btnSave = document.getElementById("buttonSave");
         var btnChange = document.getElementById("buttonSubmit");
@@ -119,15 +120,21 @@
         //     inputFields.disabled = !inputFields.disabled;
         // }
         // Cho phép sửa thông tin
-        // inputusername.readOnly = !inputusername.readOnly;
-        // inputgender.readOnly = !inputgender.readOnly;
-        // inputbirthday.readOnly = !inputbirthday.readOnly;
-        // inputemail.readOnly = !inputemail.readOnly;
+        inputusername.disabled = !inputusername.disabled;
+        inputgender.disabled = !inputgender.disabled;
+        inputbirthday.disabled = !inputbirthday.disabled;
+        inputemail.disabled = !inputemail.disabled;
 
-        
+        if(!inputemail.disabled){
             btnSave.style.visibility = 'visible';
             inputAvatar.style.visibility = 'visible';
             btnChange.textContent = 'Hủy';
+        }else{
+            btnSave.style.visibility = 'hidden';
+            inputAvatar.style.visibility = 'hidden';
+            btnChange.textContent = 'Chỉnh sửa';
+        }
+            
 
 
     }
@@ -137,22 +144,29 @@
     }
 
     function closeForm() {
-        btnSave.style.visibility = 'hidden';
-        inputAvatar.style.visibility = 'hidden';
-        btnChange.textContent = 'Chỉnh sửa';
+        
         $('#confirmationModal').modal('hide');
     }
 
     function cancelSave() {
-        btnSave.style.visibility = 'hidden';
-        inputAvatar.style.visibility = 'hidden';
-        btnChange.textContent = 'Chỉnh sửa';
         // toggleEditMode();
         closeForm();
     }
 
-    function saveData() {
-        console.log("Chỉnh sửa!");
+    function saveData(id) {
+        var inputusername = document.getElementById("inputUserName");
+        var inputgender = document.getElementById("inputGender");
+        var inputbirthday = document.getElementById("inputBirthday");
+        var inputemail = document.getElementById("inputEmail");
+
+        $.post('UpdateUser/UpdateUserInfor', { id: id, fullname: inputusername.value, gender: inputgender.value, birthday: inputbirthday.value, email: inputemail.value }, function(data) {
+            if (data.success) {
+                console.log("success");
+                location.reload();
+            } else {
+                console.error(data.message);
+            }
+        });
         toggleEditMode();
         closeForm();
     }
