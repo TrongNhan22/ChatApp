@@ -9,10 +9,19 @@ namespace ChatApp.Controllers
     public class FriendController : Controller
     {
         private readonly IFriendRepository _friend;
+        private readonly string currentId;
 
         public FriendController(IFriendRepository friend)
         {
             _friend = friend;
+            if (Globals.user_login.id != null)
+            {
+                currentId = Globals.user_login.id;
+            }
+            else
+            {
+                currentId = "6585901a24c2c50f943af18e";
+            }
         }
 
         [HttpGet]
@@ -30,8 +39,8 @@ namespace ChatApp.Controllers
                 relationship=new Relationship();
             }
 
-            var sendRequest = await _friend.GetRequestAsync("6585901a24c2c50f943af18e", userId);
-            var receiveRequest = await _friend.GetRequestAsync(userId, "6585901a24c2c50f943af18e");
+            var sendRequest = await _friend.GetRequestAsync(currentId, userId);
+            var receiveRequest = await _friend.GetRequestAsync(userId, currentId);
 
             FriendRequest friendRequest = new FriendRequest();
             if (sendRequest.id != null && receiveRequest.id == null)
@@ -77,7 +86,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeFriendRequest(string receiverId)
         {
-            var result = await _friend.CreateFriendRequest("6585901a24c2c50f943af18e", receiverId);
+            var result = await _friend.CreateFriendRequest(currentId, receiverId);
 
             if (result)
             {
@@ -92,7 +101,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CancelRequest(string receiverId)
         {
-            var result = await _friend.CancelRequestAsync("6585901a24c2c50f943af18e", receiverId);
+            var result = await _friend.CancelRequestAsync(currentId, receiverId);
 
             if (result)
             {
@@ -107,7 +116,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AcceptRequest(string makerId)
         {
-            var result = await _friend.AcceptRequestAsync("6585901a24c2c50f943af18e", makerId);
+            var result = await _friend.AcceptRequestAsync(currentId, makerId);
 
             if (result)
             {

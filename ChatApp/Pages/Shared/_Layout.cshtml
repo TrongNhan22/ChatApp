@@ -69,7 +69,7 @@
             <div class="nav-item">
                 @if (user != null)
                 {
-                    <a class="nav-link color-link-important navbar-brand text-dark" asp-area="" asp-page="/User">
+                    <a class="nav-link color-link-important navbar-brand text-dark" asp-area="" asp-controller="UpdateUser" asp-action="Index">
                         <img src="@user.avatar" class="image-frame-nav" />
                         <span class="navbar-txt">@user.fullname</span>
                     </a>

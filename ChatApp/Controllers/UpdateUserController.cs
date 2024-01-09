@@ -10,7 +10,6 @@ namespace ChatApp.Controllers
     {
         private readonly IUpdateUserRepository _repository;
         private readonly User user = Globals.user_login;
-        private readonly ILogger _logger;
         public UpdateUserController(IUpdateUserRepository repository)
         {
             _repository = repository;
@@ -21,17 +20,23 @@ namespace ChatApp.Controllers
         //    _logger = logger;
         //}
 
-        public IActionResult UpdateUser()
-        {
-            return View(User);
+        public IActionResult Index()
+        {  
+            return View(user);
         }
 
         [HttpPost]
-        public IActionResult UpdateUserInfor(User u)
-        { 
-            _repository.UpdateUser(u.id, u.fullname, u.gender, u.birthday, u.email);
+        public IActionResult UpdateUserInfor(User updatedUser)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _repository.UpdateUser(updatedUser.id, updatedUser.fullname, updatedUser.gender, updatedUser.birthday, updatedUser.email);
 
-            return NoContent();
+                    return NoContent();
+            }
+
+            return BadRequest(ModelState);
+
         }
     }
 }
