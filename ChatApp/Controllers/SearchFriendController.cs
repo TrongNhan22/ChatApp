@@ -9,24 +9,20 @@ namespace ChatApp.Controllers
     public class SearchFriendController : Controller
     {
         private readonly ISearchFriendRepository _searchFriend;
-        private readonly string currentId;
 
         public SearchFriendController(ISearchFriendRepository searchFriend)
         {
-            _searchFriend = searchFriend;
-            if ( Globals.user_login.id != null)
-            {
-                currentId = Globals.user_login.id;
-            }
-            else
-            {
-                currentId = "6585901a24c2c50f943af18e";
-            }
+            _searchFriend = searchFriend;          
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(string searchTerm)
         {
+            if (Globals.user_login == null)
+            {
+                return Redirect("~/Login");
+            }
+            string currentId = Globals.user_login.id;
             List<User> friends;
             List<UserRelationshipModel> userrelationship = new List<UserRelationshipModel>();
             if (string.IsNullOrEmpty(searchTerm))
@@ -70,6 +66,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeFriendRequest(string receiverId)
         {
+            string currentId = Globals.user_login.id;
             var result = await _searchFriend.CreateFriendRequest(currentId, receiverId);
 
             if (result)
@@ -85,6 +82,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CancelRequest(string receiverId)
         {
+            string currentId = Globals.user_login.id;
             var result = await _searchFriend.CancelRequestAsync(currentId, receiverId);
 
             if (result)
@@ -100,6 +98,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AcceptRequest(string makerId)
         {
+            string currentId = Globals.user_login.id;
             var result = await _searchFriend.AcceptRequestAsync(currentId, makerId);
 
             if (result)
