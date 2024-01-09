@@ -24,11 +24,12 @@ namespace ChatApp.Repository
         public async Task<User> GetUserById(string id)
         {
             var filter = Builders<User>.Filter.Eq("id", id);
-            User userUpdate = await _user.Find(filter).FirstOrDefaultAsync();
+            User userUpdate = new User();
+            userUpdate = await _user.Find(filter).FirstOrDefaultAsync();
             return userUpdate;
         }
 
-        public async void UpdateUser(string id, string fullname, string gender, string birhtday, string email)
+        public async Task<bool> UpdateUser(string id, string fullname, string gender, string birhtday, string email)
         {
             var filter = Builders<User>.Filter.Eq("id", ObjectId.Parse(id));
             var update = Builders<User>.Update
@@ -39,16 +40,7 @@ namespace ChatApp.Repository
             //User user = this.GetUserById(id);
             //var result = await user.UpdateOne(filter, update);
             var updateResult = await _user.UpdateOneAsync(filter, update);
-            if (updateResult.IsAcknowledged && updateResult.ModifiedCount > 0)
-            {
-                // Cập nhật thành công
-                Console.WriteLine("Thông tin người dùng đã được cập nhật thành công.");
-            }
-            else
-            {
-                // Cập nhật không thành công
-                Console.WriteLine("Đã xảy ra lỗi khi cập nhật thông tin người dùng.");
-            }
+            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
     }
 }

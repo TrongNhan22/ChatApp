@@ -9,10 +9,19 @@ namespace ChatApp.Controllers
     public class SearchFriendController : Controller
     {
         private readonly ISearchFriendRepository _searchFriend;
+        private readonly string currentId;
 
         public SearchFriendController(ISearchFriendRepository searchFriend)
         {
             _searchFriend = searchFriend;
+            if ( Globals.user_login.id != null)
+            {
+                currentId = Globals.user_login.id;
+            }
+            else
+            {
+                currentId = "6585901a24c2c50f943af18e";
+            }
         }
 
         [HttpGet]
@@ -33,12 +42,12 @@ namespace ChatApp.Controllers
             {
                 foreach (var user in friends)
                 {
-                    if(user!=null && user.id != "6585901a24c2c50f943af18e" && user.id != null)
+                    if(user!=null && user.id != currentId && user.id != null)
                     {
                         Relationship relationship = new Relationship();
-                        relationship = await _searchFriend.GetRelationshipAsync("6585901a24c2c50f943af18e", user.id);
-                        var sendRequest = await _searchFriend.GetRequestAsync("6585901a24c2c50f943af18e", user.id);
-                        var receiveRequest = await _searchFriend.GetRequestAsync(user.id, "6585901a24c2c50f943af18e");
+                        relationship = await _searchFriend.GetRelationshipAsync(currentId , user.id);
+                        var sendRequest = await _searchFriend.GetRequestAsync(currentId, user.id);
+                        var receiveRequest = await _searchFriend.GetRequestAsync(user.id, currentId);
 
                         FriendRequest friendRequest = new FriendRequest();
                         if (sendRequest.id != null && receiveRequest.id == null)
@@ -61,7 +70,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeFriendRequest(string receiverId)
         {
-            var result = await _searchFriend.CreateFriendRequest("6585901a24c2c50f943af18e", receiverId);
+            var result = await _searchFriend.CreateFriendRequest(currentId, receiverId);
 
             if (result)
             {
@@ -76,7 +85,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CancelRequest(string receiverId)
         {
-            var result = await _searchFriend.CancelRequestAsync("6585901a24c2c50f943af18e", receiverId);
+            var result = await _searchFriend.CancelRequestAsync(currentId, receiverId);
 
             if (result)
             {
@@ -91,7 +100,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AcceptRequest(string makerId)
         {
-            var result = await _searchFriend.AcceptRequestAsync("6585901a24c2c50f943af18e", makerId);
+            var result = await _searchFriend.AcceptRequestAsync(currentId, makerId);
 
             if (result)
             {
