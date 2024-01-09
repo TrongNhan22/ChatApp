@@ -1,5 +1,119 @@
-﻿@*
+﻿@using ChatApp.Models
+@model IEnumerable<UserRelationshipModel>
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/friendrequest.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div style="margin: 100px 50px 0 50px">
+    <h1>Mọi người</h1>
+    <div class="friendr-container">
+        @foreach (var item in Model)
+        {
+            <div class="friend-request">
+                @if (@item.Relationship != null)
+                {
+                        <a href="../Friend?userId=@item.User.id&relationshipId=@item.Relationship.id">
+                            <img src="@item.User.avatar" alt="Profile picture" class="img-user">
+                        @item.User.fullname
+                        </a>
+                }
+                else
+                {
+                        <a href="../Friend?userId=@item.User.id&relationshipId=null">
+                            <img src="@item.User.avatar" alt="Profile picture" class="img-user">
+                        @item.User.fullname
+                        </a>
+                }
+
+                <div style="display: flex, flex-direction: row, justify-content: center, align-item=center">
+                    @if (item.Relationship != null && item.Relationship.id != null)
+                    {
+                            <button class="btn-friend" id="btn-unfriend" onClick="NavigateToUser('@item.User.id', '@item.Relationship.id')" style="visibility: visible">Bạn bè</button>
+                    }
+                    else if (item.FriendRequest.id != null && item.FriendRequest.makerId != item.User.id)
+                    {
+                            <button type="button"  class='btn-add' id="btn-add-friend" onClick="makeFriendRequest('@item.User.id')" style="visibility: hidden">Thêm bạn bè</button>
+                            <button type="button"  class='btn-cancel-request' id="btn-cancel-request" onClick="cancelRequest('@item.User.id')" style="visibility: visible">Hủy lời mời</button>
+                            <button type="button"  class='btn-accept-request' id="btn-accept-request" onClick="acceptRequest('@item.User.id')" style="visibility: hidden">Chấp nhận lời mời</button>
+                    }
+                    else if (item.FriendRequest.id != null && item.FriendRequest.makerId == item.User.id)
+                    {
+                            <button type="button"  class='btn-add' id="btn-add-friend" onClick="makeFriendRequest('@item.User.id')" style="visibility: hidden">Thêm bạn bè</button>
+                            <button type="button"  class='btn-cancel-request' id="btn-cancel-request" onClick="cancelRequest('@item.User.id')" style="visibility: hidden">Hủy lời mời</button>
+                            <button type="button"  class='btn-accept-request' id="btn-accept-request" onClick="acceptRequest('@item.User.id')" style="visibility: visible">Chấp nhận lời mời</button>
+                    }
+                    else
+                    {
+                            <button type="button"  class='btn-add' id="btn-add-friend" onClick="makeFriendRequest('@item.User.id')" style="visibility: visible">Thêm bạn bè</button>
+                            <button type="button"  class='btn-cancel-request' id="btn-cancel-request" onClick="cancelRequest('@item.User.id')" style="visibility: hidden">Hủy lời mời</button>
+                            <button type="button"  class='btn-accept-request' id="btn-accept-request" onClick="acceptRequest('@item.User.id')" style="visibility: hidden">Chấp nhận lời mời</button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+    function NavigateToUser(userid, relationshipid){
+        window.location.href="../Friend?userId=" + userid + "&relationshipId=" + relationshipid;
+    }
+
+    function makeFriendRequest(receiverid){
+        $.post('SearchFriend/MakeFriendRequest', {receiverId : receiverid}, function(data) {
+            if(data.success){
+                console.log("success");
+                location.reload();
+            }else{
+                console.error(data.message);
+            }
+        });
+    }
+
+    function showCancel(){
+        document.getElementById('btn-add-friend').style.visibility = 'hidden';
+        document.getElementById('btn-cancel-request').style.visibility = 'visible';
+    }
+
+    function showRequest(){
+        document.getElementById('btn-add-friend').style.visibility = 'visible';
+        document.getElementById('btn-cancel-request').style.visibility = 'hidden';
+    }
+
+    function cancelRequest(receiverid){
+         $.post('SearchFriend/CancelRequest', {receiverId : receiverid}, function(data) {
+            if(data.success){
+                console.log("success");
+                location.reload();
+            }else{
+                console.error(data.message);
+            }
+        });
+    }
+
+    function acceptRequest(makerid){
+        $.post('SearchFriend/AcceptRequest', {makerId : makerid}, function(data) {
+            if(data.success){
+                console.log("success");
+                location.reload();
+            }else{
+                console.error(data.message);
+            }
+        });
+    }
+</script>
