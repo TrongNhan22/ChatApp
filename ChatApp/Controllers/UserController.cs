@@ -28,7 +28,7 @@ namespace ChatApp.Controllers
                 return Redirect("/");
             }
             // If the user does not exist, redirect back to the login page
-            TempData["Error"] = "Email or password is not correct!";
+            TempData["Error"] = "Tài khoản hoặc mật khẩu không đúng!";
             return Redirect("/Login");
         }
 
@@ -40,11 +40,11 @@ namespace ChatApp.Controllers
             if (account)
             {
                 // If the user exists, redirect to the home page
-                TempData["Noti"] = "New account was created succcessfully!";
+                TempData["Noti"] = "Tạo tài khoản mới thành công!";
                 return Redirect("/sign-up");
             }
             // If the user does not exist, redirect back to the login page
-            TempData["Error"] = "Email is already used!";
+            TempData["Error"] = "Email này đã được sử dụng!";
             return Redirect("/sign-up");
         }
     }
