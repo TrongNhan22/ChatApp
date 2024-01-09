@@ -9,5 +9,6 @@ namespace ChatApp.Data
         public string? DatabaseName { get; set; }
         public string? userCollectionName { get; set; }
         public string MessageCollectionName { get; set; } = null!;
+        public string RelationshipCollectionName { get; set; } = null!;
     }
 }
