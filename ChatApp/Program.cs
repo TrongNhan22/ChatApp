@@ -1,5 +1,6 @@
 using ChatApp.Data;
 using ChatApp.Hubs;
+using ChatApp.Interface;
 using ChatApp.Repository;
 using ChatApp.Models;
 using MongoDB.Bson;
@@ -7,8 +8,7 @@ using AspNetCore.Identity.Mongo.Model;
 //using AspNetCore.Identity.Mongo;
 using MongoDbGenericRepository.Attributes;
 using ChatApp.Interface;
-using ChatApp.Interfaces;
-using ChatApp.Repositories;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,12 +31,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddScoped<ISearchFriendRepository, SearchFriendRepository>();
+builder.Services.AddScoped<IFriendRepository, FriendRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<ILogin, LoginRepository>();
-
-//Database Singletons
-builder.Services.AddSingleton<MessageRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-
+builder.Services.AddScoped<IUpdateUserRepository, UpdateUserRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,6 +56,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapBlazorHub();
 app.MapHub<ChatHub>("/ChatHub");
+app.MapHub<FRequestNotificationHub>("/fRequestNotificationHub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
