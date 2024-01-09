@@ -8,7 +8,7 @@ namespace ChatApp.ViewModels
         public string ReceiverId { get; set; } = null!;
         public IEnumerable<Message>? Messages { get; set; }
         public string? Content { get; set; }
-        public string? Media { get; set; }
+        public IFormFile? Media { get; set; }
         public string? Date { get; set; }
         public string CurrentChatParterId { get; set; }
         public IEnumerable<string>? ChatUser { get; set; }

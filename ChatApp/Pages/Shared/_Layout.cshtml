@@ -68,10 +68,20 @@
                 </ul>
             </div>
             <div class="nav-item">
-                <a class="nav-link color-link-important navbar-brand text-dark" asp-area="" asp-page="/User">
-                    <img src="@user.avatar" class="image-frame-nav" />
-                    <span class="navbar-txt">@user.fullname</span>
-                </a>
+                @if (user != null)
+                {
+                    <a class="nav-link color-link-important navbar-brand text-dark" asp-area="" asp-page="/User">
+                        <img src="@user.avatar" class="image-frame-nav" />
+                        <span class="navbar-txt">@user.fullname</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="nav-link text-dark navbar-brand" asp-area="" asp-page="Login">
+                        <i class="fa-solid fa-user navbar-ic"></i>
+                        <span class="navbar-txt">Đăng nhập</span>
+                    </a>
+                }
             </div>
         </nav>
     </header>

@@ -4,6 +4,7 @@
     //@model ChatApp.Pages.Shared.Pages_Shared__Layout;
     Layout = "../../Pages/Shared/_Layout.cshtml";
     string avatarLink = "";
+    IEnumerable<ChatPartnerViewModel> FilteredFriends = Model.ChatPartners;
 }
 
 <head>
@@ -34,18 +35,19 @@
                                     <div class="p-3">
 
                                         <div class="input-group rounded mb-3">
-                                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-                                                   aria-describedby="search-addon" />
-                                            <span class="input-group-text border-0" id="search-addon">
+                                            <input type="search" class="form-control rounded" placeholder="Tìm kiếm bạn bè"
+                                                   aria-label="Tìm kiếm bạn bè" aria-describedby="search-addon" 
+                                                   id="friendSearch"/>
+                                            <span class="input-group-text border-0" id="search-addon" style="cursor:pointer;">
                                                 <i class="fas fa-search"></i>
                                             </span>
                                         </div>
                                         <div data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px; overflow-y: scroll">
                                             <ul class="scrollable list-unstyled mb-0">
                                                 <!--This is where online user and/or groups will be-->
-                                                @if (Model.ChatPartners != null && Model.ChatPartners.Count() > 0)
+                                                @if (FilteredFriends != null && FilteredFriends.Count() > 0)
                                                 {
-                                                    @foreach (var chatPartner in Model.ChatPartners)
+                                                    @foreach (var chatPartner in FilteredFriends)
                                                     {
                                                         @if (chatPartner.id == Model.CurrentChatParterId) avatarLink = chatPartner.avatar;
                                                         <li class="p-2 border-bottom" style="@(chatPartner.id==Model.CurrentChatParterId?"background-color: #eee;":"")">
@@ -129,8 +131,8 @@
                                              alt="avatar 3" style="width: 40px; height: 100%;">
                                         <input type="text" asp-for="Content" class="form-control form-control-lg" id="messageInput"
                                                placeholder="Nhập tin nhắn">
-                                        <label class="ms-1 text-muted" for="media" ><i class="fas fa-paperclip"></i></label>
-                                        <input type="file hidden" name="media" id="media"/>
+                                        <label class="ms-3 text-muted" for="media"><i class="fas fa-paperclip" style="cursor:pointer;"></i></label>
+                                        <input type="file" name="media" id="media" style="display:none; height:0px;width:0px;" />
                                         <a class="ms-3 text-muted" id="sendmessage" style="outline:none; cursor:pointer;"><i class="fas fa-paper-plane" id="sendmessage"></i></a>
                                     </div>
                                 </div>
@@ -158,35 +160,37 @@
             var messageInput = document.getElementById('messageInput');
             var senderId = "@Model.SenderId";
             var receiverId = "@Model.ReceiverId";
+            var friendSearchButton = document.getElementById('search-addon');
+            var friendFilter = document.getElementById('friendSearch');
             // Set initial focus to message input box.
             messageInput.focus();
             console.log(senderId);
             console.log(receiverId);
-            
+
             // Start the connection.
             var connection = new signalR.HubConnectionBuilder()
                 .withUrl('/ChatHub')
                 .withAutomaticReconnect()
                 .build();
 
-            function addUserElement(userId) {
-                var userListBox = document.getElementById("userlist");
-                var userElement = document.createElement('div');
-                userElement.className = "p-2 border-bottom";
-                userElement.innerHTML = `<p class="fw-bold mb-0">${userId}</p>`;
-                userListBox.appendChild(userElement);
-            }
+            //function addUserElement(userId) {
+            //    var userListBox = document.getElementById("userlist");
+            //    var userElement = document.createElement('div');
+            //    userElement.className = "p-2 border-bottom";
+            //    userElement.innerHTML = `<p class="fw-bold mb-0">${userId}</p>`;
+            //    userListBox.appendChild(userElement);
+            //}
 
-            function removeUserElement(userId) {
-                var userListBox = document.getElementById("userlist");
-                console.log("User list Box", userListBox.children);
-                for (var child of userListBox.children) {
-                    if (child.textContent === userId){
-                        userListBox.removeChild(child);
-                        break;
-                    }
-                }
-            }
+            //function removeUserElement(userId) {
+            //    var userListBox = document.getElementById("userlist");
+            //    console.log("User list Box", userListBox.children);
+            //    for (var child of userListBox.children) {
+            //        if (child.textContent === userId){
+            //            userListBox.removeChild(child);
+            //            break;
+            //        }
+            //    }
+            //}
 
             // Create a function that the hub can call to broadcast messages.
             connection.on('broadcastMessage', function (message) {
@@ -209,7 +213,6 @@
                 chatBox.appendChild(chatElement);
                 chatBox.scrollTop = chatBox.scrollHeight;
             });
-
             //connection.on('ReceiveCurrentUserList', function (users){
             //    connectedUserList = users;
             //    users.forEach((user) =>{
