@@ -1,4 +1,5 @@
-﻿using AspNetCore.Identity.Mongo.Mongo;
+﻿using AddFriend.Models;
+using AspNetCore.Identity.Mongo.Mongo;
 using ChatApp.Controllers;
 using ChatApp.Data;
 using ChatApp.Interface;
@@ -64,10 +65,10 @@ namespace ChatApp.Repository
                 })
                 .ToListAsync();
             chatPartnerList.AddRange(
-                await _relationshipCollection.Find(x => x.UserId == thisUser.id)
+                await _relationshipCollection.Find(x => x.userId == thisUser.id)
                 .Project(x => new ChatPartnerViewModel
                 {
-                    id = x.FriendId,
+                    id = x.friendId,
                 })
                 .ToListAsync());
             for (int i = 0; i < chatPartnerList.Count; i++)
