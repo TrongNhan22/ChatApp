@@ -28,11 +28,10 @@
                             <span class="navbar-txt">Trang chủ</span>
                         </a>
                     </li>
-                    @*Open Friend Request notification fragment*@
                     <li class="nav-item" id="addFriendNotification">
-                        <a class="nav-link text-dark navbar-brand" onClick="showFR()">
+                        <a class="nav-link text-dark navbar-brand" href="/searchfriend">
                             <i class="fa-solid fa-user-group navbar-ic"></i>
-                            <span class="navbar-txt">Kết bạn</span>
+                            <span class="navbar-txt">Bạn bè</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -42,7 +41,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark navbar-brand" asp-area="" asp-page="/Privacy">
+                        <a class="nav-link text-dark navbar-brand" asp-controller="Notification" asp-action="Index">
                             <i class="fa-solid fa-bell navbar-ic"></i>
                             <span class="navbar-txt">Thông báo</span>
                         </a>
@@ -68,47 +67,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @*Friend Request show box*@
-            <div id="myFragment" class="invisible">
-                <ul style="list-style-type:none" id="listFriendRequest">
-                    <li>
-                        <div class="card notification-card">
-                            <div class="card-body">
-                                <table class="p-1" style="width: 100%">
-                                    <tr class="d-block" style="padding-bottom: 10px !important;">
-                                        <td style="width:20%"><a href=""><img src="https://i.scdn.co/image/ab6761610000e5eb00ece52e50b41c7d6192cc26" alt="user-image" class="rounded-circle"/></a></td>
-                                        <td style="width:80%;"><div class="card-title" style="verticla-align: middle">Jane send you a friend request</div></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <a href="#" class="btn btn-primary">Accept</a>
-                                            <a href="#" class="btn btn-danger dismiss-notification">Decline</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="card notification-card">
-                            <div class="card-body">
-                                <table class="p-1" style="width: 100%">
-                                    <tr class="d-block" style="padding-bottom: 10px !important;">
-                                        <td style="width:20%"><a href=""><img src="https://i.scdn.co/image/ab6761610000e5eb00ece52e50b41c7d6192cc26" alt="user-image" class="rounded-circle"/></a></td>
-                                        <td style="width:80%;"><div class="card-title" style="verticla-align: middle">Jane send you a friend request</div></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <a href="#" class="btn btn-primary">Accept</a>
-                                            <a href="#" class="btn btn-danger dismiss-notification">Decline</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+
             @RenderBody()
         </main>
     </div>
@@ -128,32 +87,17 @@
 
 @*Handle events*@
 <script>
-    function showFR(){
-        event.preventDefault();
-        let fragment = document.getElementById("myFragment");
-        fragment.classList.toggle("invisible")
-    }
-
-    $(document).ready(function() {
-        var $addFriendNotification = $('#addFriendNotification');
-        var $myFragment = $('#myFragment');
-
-        var offset = $addFriendNotification.offset();
-        var height = $addFriendNotification.height();
-        var width = $addFriendNotification.width();
-
-        $myFragment.css({
-            position: 'absolute',
-            left: offset.left + width / 2,
-            transform: 'translate(-50%)'
-        });
-    });
 
 
     @*Search Friend Event*@
     function findFriend() {
         var friendName = document.getElementById("searchInput").value;
-        window.location.href = "/SearchFriend/Index";
+        if(friendName == "" || friendName == null){
+            
+        }else{
+            window.location.href = "/SearchFriend?searchTerm="+friendName;
+        }
+        
     }
     
 </script>

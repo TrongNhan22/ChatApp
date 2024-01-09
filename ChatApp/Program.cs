@@ -1,5 +1,6 @@
 using ChatApp.Data;
 using ChatApp.Hubs;
+using ChatApp.Interface;
 using ChatApp.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();
 builder.Services.Configure<MongoDBSetting>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddScoped<ISearchFriendRepository, SearchFriendRepository>();
+builder.Services.AddScoped<IFriendRepository, FriendRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +33,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapBlazorHub();
 app.MapHub<ChatHub>("/ChatHub");
+app.MapHub<FRequestNotificationHub>("/fRequestNotificationHub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
