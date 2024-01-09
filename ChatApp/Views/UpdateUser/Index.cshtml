@@ -28,12 +28,12 @@
     // else gd = "female";
 }
 <head>
-    <link rel="stylesheet" href="/css/user.css"/>
-    <link rel="stylesheet" href="/css/Layout.css"/>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/Layout.css" />
+    <link rel="stylesheet" href="/css/user.css" />
 </head>
 
 <div class="userUI border">
@@ -42,7 +42,8 @@
     <form form method="post" action="/UpdateUser/UpdateUserInfor" asp-route-updatedUser="{@Model}" id="myForm" class="row g-3 mt-2">
         @Html.AntiForgeryToken()
         <div class="col-md-6 justify-content-center d-flex align-items-center flex-column">
-
+            <img src="@Model.avatar" src="@Model.fullname" class="image-frame" />
+            <h4 class="mt-2 mb-2 text-black-50">@Model.fullname</h4>
             <input type="file" asp-for="avatar" id="inputAvt" placeholder="Chọn ảnh đại diện mới" />
         </div>
         <div class="col-md-6 rounded">
