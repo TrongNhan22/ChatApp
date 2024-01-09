@@ -9,24 +9,20 @@ namespace ChatApp.Controllers
     public class FriendController : Controller
     {
         private readonly IFriendRepository _friend;
-        private readonly string currentId;
 
         public FriendController(IFriendRepository friend)
         {
             _friend = friend;
-            if (Globals.user_login.id != null)
-            {
-                currentId = Globals.user_login.id;
-            }
-            else
-            {
-                currentId = "6585901a24c2c50f943af18e";
-            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(string userId, string relationshipId)
         {
+            if (Globals.user_login == null)
+            {
+                return Redirect("~/Login");
+            }
+            string currentId = Globals.user_login.id;
             User friend = new User();
             friend = await _friend.GetUserAsync(userId);
             Relationship relationship;
@@ -86,6 +82,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeFriendRequest(string receiverId)
         {
+            string currentId = Globals.user_login.id;
             var result = await _friend.CreateFriendRequest(currentId, receiverId);
 
             if (result)
@@ -101,6 +98,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CancelRequest(string receiverId)
         {
+            string currentId = Globals.user_login.id;
             var result = await _friend.CancelRequestAsync(currentId, receiverId);
 
             if (result)
@@ -116,6 +114,7 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AcceptRequest(string makerId)
         {
+            string currentId = Globals.user_login.id;
             var result = await _friend.AcceptRequestAsync(currentId, makerId);
 
             if (result)
