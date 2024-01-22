@@ -26,7 +26,9 @@
             :
             `
                     <div class="d-flex flex-row justify-content-start" >
-                        <p>${senderAvatar} </p>
+                    <img src="${senderAvatar}" alt="avatar"
+                    class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                            style="width: 60px; height: 60px; object-fit:cover
                         <div>
                             <p class="small p-2 ms-3 mb-1 rounded-3" style = "background-color: #f5f6f7;" >
                                 ${message.content}

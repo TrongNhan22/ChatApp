@@ -49,5 +49,13 @@ namespace ChatApp.Controllers
 
             }
         }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            return Redirect("/Login");
+            Globals.user_login = null;
+
+        }
     }
 }
